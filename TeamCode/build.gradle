@@ -25,11 +25,11 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
-    implementation 'org.ftclib.ftclib:core:2.0.1' //core
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 
     implementation 'org.apache.commons:commons-math3:3.6.1'
 
-    implementation "com.acmerobotics.roadrunner:ftc:0.1.6"
-    implementation "com.acmerobotics.dashboard:dashboard:0.4.13"
+    implementation 'com.acmerobotics.roadrunner:core:0.5.6'
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
 }
