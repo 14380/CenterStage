@@ -110,12 +110,12 @@ public class DriveSubsystem extends SubsystemBase {
                 -leftY.getAsDouble(),
                 -leftX.getAsDouble()
 
-        ).rotated(-poseEstimate.getHeading());
+        ).rotated(-poseEstimate.getHeading()); //You can turn off field oriented controls
 
         Pose2d vel = new Pose2d(
                 input.getX(),
                 input.getY(),
-                -rightX.getAsDouble()
+                -rightX.getAsDouble()  //TODO: Look at rotation speed.
         );
 
         // driveBase.DumpData(telemetry);
