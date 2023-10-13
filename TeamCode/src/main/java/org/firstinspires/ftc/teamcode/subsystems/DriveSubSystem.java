@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 public class DriveSubsystem extends SubsystemBase {
 
@@ -101,6 +102,27 @@ public class DriveSubsystem extends SubsystemBase {
         return driveBase.getLocalizer();
     }
 
+
+    public void drive(DoubleSupplier leftX, DoubleSupplier leftY, DoubleSupplier rightX) {
+        Pose2d poseEstimate = driveBase.getPoseEstimate();
+
+        Vector2d input = new Vector2d(
+                -leftY.getAsDouble(),
+                -leftX.getAsDouble()
+
+        ).rotated(-poseEstimate.getHeading());
+
+        Pose2d vel = new Pose2d(
+                input.getX(),
+                input.getY(),
+                -rightX.getAsDouble()
+        );
+
+        // driveBase.DumpData(telemetry);
+        driveBase.setWeightedDrivePower(vel);
+        driveBase.update();
+
+    }
     public void drive() {
         //telemetry.addData("DRIVE","Driving");
         Pose2d poseEstimate = driveBase.getPoseEstimate();

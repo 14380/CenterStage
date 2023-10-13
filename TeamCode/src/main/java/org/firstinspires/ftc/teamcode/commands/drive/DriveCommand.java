@@ -23,6 +23,6 @@ public class DriveCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.drive();
+        drive.drive(this.leftX, this.leftY, this.rightX);
     }
 }
