@@ -9,6 +9,7 @@ package org.firstinspires.ftc.teamcode.teleop;
         import com.arcrobotics.ftclib.command.CommandOpMode;
         import com.arcrobotics.ftclib.command.CommandScheduler;
 
+        import com.arcrobotics.ftclib.command.InstantCommand;
         import com.arcrobotics.ftclib.command.ParallelCommandGroup;
         import com.arcrobotics.ftclib.gamepad.GamepadEx;
         import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -16,11 +17,14 @@ package org.firstinspires.ftc.teamcode.teleop;
         import com.qualcomm.robotcore.hardware.DcMotor;
 
         import org.firstinspires.ftc.teamcode.commands.drive.DriveCommand;
+        import org.firstinspires.ftc.teamcode.commands.horizontal.ExtendHorizontalCommand;
+        import org.firstinspires.ftc.teamcode.commands.horizontal.RetractHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
         import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
         import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
+        import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
 @Config
@@ -29,6 +33,8 @@ public class BBTeleOp extends CommandOpMode {
 
     private DriveCommand driveCommand;
     private IntakeSubsystem intakeSubsystem;
+
+    private HorizontalSlideSubsystem horizontalSlideSubsystem;
 
     private IntakeOnCommand intakeOnCommand;
     private GamepadEx gp1;
@@ -44,6 +50,7 @@ public class BBTeleOp extends CommandOpMode {
         mecDrive = new BotBuildersMecanumDrive(hardwareMap);
 
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap);
 
 
         gp1 = new GamepadEx(gamepad1);
@@ -64,8 +71,6 @@ public class BBTeleOp extends CommandOpMode {
 
         schedule(driveCommand);
 
-        // update telemetry every loop
-        //schedule(new RunCommand(telemetry::update));
 
 
     }
@@ -94,7 +99,16 @@ public class BBTeleOp extends CommandOpMode {
                 new IntakeOffCommand(intakeSubsystem)
         );
 
+        gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                new ExtendHorizontalCommand(horizontalSlideSubsystem)
+        );
 
+        gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new RetractHorizontalCommand(horizontalSlideSubsystem)
+        );
+
+        schedule(new InstantCommand(() -> telemetry.addData( "Pos", horizontalSlideSubsystem.getCurrentPosition() )));
+        schedule(new InstantCommand(()-> telemetry.update()));
 
         if(gp1.isDown(GamepadKeys.Button.X) && gp1.isDown(GamepadKeys.Button.Y)) {
             mecDrive.ReAlignIMU();
