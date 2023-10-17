@@ -19,6 +19,7 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.commands.drive.DriveCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.ExtendHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.RetractHorizontalCommand;
+        import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
@@ -103,11 +104,18 @@ public class BBTeleOp extends CommandOpMode {
                 new ExtendHorizontalCommand(horizontalSlideSubsystem)
         );
 
+        gp1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
+                new IntakeAdvanceCommand(intakeSubsystem)
+        );
+
         gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new RetractHorizontalCommand(horizontalSlideSubsystem)
         );
 
         schedule(new InstantCommand(() -> telemetry.addData( "Pos", horizontalSlideSubsystem.getCurrentPosition() )));
+        schedule(new InstantCommand(() -> telemetry.addData( "Top", intakeSubsystem.getTopDistance() )));
+        schedule(new InstantCommand(() -> telemetry.addData( "Bottom", intakeSubsystem.getBottomDistance() )));
+
         schedule(new InstantCommand(()-> telemetry.update()));
 
         if(gp1.isDown(GamepadKeys.Button.X) && gp1.isDown(GamepadKeys.Button.Y)) {

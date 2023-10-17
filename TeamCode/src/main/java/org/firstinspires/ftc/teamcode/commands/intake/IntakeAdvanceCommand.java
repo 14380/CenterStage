@@ -4,25 +4,20 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 
-public class IntakeOnCommand extends CommandBase {
+public class IntakeAdvanceCommand extends CommandBase {
 
     private IntakeSubsystem intakeSubsystem;
 
-    public IntakeOnCommand(IntakeSubsystem intake){
+    public IntakeAdvanceCommand(IntakeSubsystem intake){
         this.intakeSubsystem = intake;
     }
 
     @Override
     public void initialize(){
-        this.intakeSubsystem.IntakeOn();
+        this.intakeSubsystem.IntakeAdvance();
     }
-
-
-
     @Override
     public boolean isFinished(){
-
-
         return true;
     }
 
