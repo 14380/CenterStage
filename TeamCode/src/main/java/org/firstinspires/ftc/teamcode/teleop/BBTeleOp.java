@@ -23,10 +23,17 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
+        import org.firstinspires.ftc.teamcode.commands.vertical.ExtendVerticalCommand;
+        import org.firstinspires.ftc.teamcode.commands.vertical.RetractVerticalCommand;
+        import org.firstinspires.ftc.teamcode.commands.winch.WinchOffCommand;
+        import org.firstinspires.ftc.teamcode.commands.winch.WinchOnCommand;
+        import org.firstinspires.ftc.teamcode.commands.winch.WinchReverseCommand;
         import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
         import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+        import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
+        import org.firstinspires.ftc.teamcode.subsystems.WinchSubsystem;
 
 @Config
 @TeleOp(group = "drive")
@@ -36,6 +43,10 @@ public class BBTeleOp extends CommandOpMode {
     private IntakeSubsystem intakeSubsystem;
 
     private HorizontalSlideSubsystem horizontalSlideSubsystem;
+
+    private VerticalSlideSubsystem verticalSlideSubsystem;
+
+    private WinchSubsystem winchSubsystem;
 
     private IntakeOnCommand intakeOnCommand;
     private GamepadEx gp1;
@@ -52,6 +63,8 @@ public class BBTeleOp extends CommandOpMode {
 
         intakeSubsystem = new IntakeSubsystem(hardwareMap);
         horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap);
+        winchSubsystem = new WinchSubsystem(hardwareMap);
+        verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap);
 
 
         gp1 = new GamepadEx(gamepad1);
@@ -112,9 +125,32 @@ public class BBTeleOp extends CommandOpMode {
                 new RetractHorizontalCommand(horizontalSlideSubsystem)
         );
 
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_UP).whenPressed(
+                new WinchOnCommand(winchSubsystem)
+        ).whenReleased(
+                new WinchOffCommand(winchSubsystem)
+        );
+
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
+                new WinchReverseCommand(winchSubsystem)
+        ).whenReleased(
+                new WinchOffCommand(winchSubsystem)
+        );
+
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+                new ExtendVerticalCommand(verticalSlideSubsystem)
+        );
+
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
+            new RetractVerticalCommand(verticalSlideSubsystem)
+        );
+
+
         schedule(new InstantCommand(() -> telemetry.addData( "Pos", horizontalSlideSubsystem.getCurrentPosition() )));
-        schedule(new InstantCommand(() -> telemetry.addData( "Top", intakeSubsystem.getTopDistance() )));
-        schedule(new InstantCommand(() -> telemetry.addData( "Bottom", intakeSubsystem.getBottomDistance() )));
+        schedule(new InstantCommand(() -> telemetry.addData( "Vert", verticalSlideSubsystem.getCurrentPosition() )));
+
+        //schedule(new InstantCommand(() -> telemetry.addData( "Top", intakeSubsystem.getTopDistance() )));
+        //schedule(new InstantCommand(() -> telemetry.addData( "Bottom", intakeSubsystem.getBottomDistance() )));
 
         schedule(new InstantCommand(()-> telemetry.update()));
 

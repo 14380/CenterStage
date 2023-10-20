@@ -115,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
         Pose2d vel = new Pose2d(
                 input.getX(),
                 input.getY(),
-                -rightX.getAsDouble()  //TODO: Look at rotation speed.
+                -(rightX.getAsDouble())  //TODO: Look at rotation speed.
         );
 
         // driveBase.DumpData(telemetry);

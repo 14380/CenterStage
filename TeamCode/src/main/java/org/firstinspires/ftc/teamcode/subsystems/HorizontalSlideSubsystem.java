@@ -10,8 +10,8 @@ public class HorizontalSlideSubsystem extends SubsystemBase {
 
     private DcMotorEx horizontalMotor;
 
-    private int EXTENDED_POS = 2100;
-    private int RETRACT_POS = 50;
+    private int EXTENDED_POS = 1050;
+    private int RETRACT_POS = 20;
 
     public HorizontalSlideSubsystem(HardwareMap map){
         horizontalMotor = map.get(DcMotorEx.class, "horizontalSlide");

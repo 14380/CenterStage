@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -17,21 +18,30 @@ public class IntakeSubsystem extends SubsystemBase {
     private DistanceSensor sensorDistanceTop;
     private DistanceSensor sensorDistanceBottom;
 
+    private ElapsedTime timer;
+
+    private double cachedDistance = 0;
+
     public IntakeSubsystem(HardwareMap map){
         intakeMotor = map.get(DcMotorEx.class, "intake");
         intakeServo = map.get(CRServo.class, "intakeServo");
         sensorDistanceTop = map.get(DistanceSensor.class, "topC");
         sensorDistanceBottom = map.get(DistanceSensor.class, "bottomC");
+        timer = new ElapsedTime();
 
         intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
     }
 
     public boolean IsTopCovered(){
-        double distance = sensorDistanceTop.getDistance(DistanceUnit.MM);
 
-        if(distance <= 50){
+        if(timer.milliseconds() > 500) {
+            cachedDistance = sensorDistanceTop.getDistance(DistanceUnit.MM);
+            timer.reset();
+        }
+        if (cachedDistance <= 15) {
             return true;
         }
         return false;
@@ -56,7 +66,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public void IntakeOn(){
         intakeMotor.setPower(1);
         if(!IsTopCovered()){
-            IntakeAdvanceSpeed(0.2);
+            IntakeAdvanceSpeed(1);
         }else{
             //turn off the advancement if the top is covered.
             IntakeAdvanceSpeed(0);
