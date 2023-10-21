@@ -15,7 +15,7 @@ public class HorizontalSlideSubsystem extends SubsystemBase {
 
     public HorizontalSlideSubsystem(HardwareMap map){
         horizontalMotor = map.get(DcMotorEx.class, "horizontalSlide");
-        horizontalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        horizontalMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
 
     public void Extend(){

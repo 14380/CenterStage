@@ -26,7 +26,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor = map.get(DcMotorEx.class, "intake");
         intakeServo = map.get(CRServo.class, "intakeServo");
         sensorDistanceTop = map.get(DistanceSensor.class, "topC");
-        sensorDistanceBottom = map.get(DistanceSensor.class, "bottomC");
+        //sensorDistanceBottom = map.get(DistanceSensor.class, "bottomC");
         timer = new ElapsedTime();
 
         intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -37,7 +37,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean IsTopCovered(){
 
-        if(timer.milliseconds() > 500) {
+        if(timer.milliseconds() > 100) {
             cachedDistance = sensorDistanceTop.getDistance(DistanceUnit.MM);
             timer.reset();
         }
