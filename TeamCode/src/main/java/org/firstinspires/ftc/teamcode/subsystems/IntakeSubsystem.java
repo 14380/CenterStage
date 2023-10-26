@@ -22,7 +22,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private double cachedDistance = 0;
 
-    public IntakeSubsystem(HardwareMap map){
+    private RobotStateSubsystem robotState;
+
+    public IntakeSubsystem(HardwareMap map, RobotStateSubsystem state){
         intakeMotor = map.get(DcMotorEx.class, "intake");
         intakeServo = map.get(CRServo.class, "intakeServo");
         sensorDistanceTop = map.get(DistanceSensor.class, "topC");
@@ -32,6 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeServo.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        robotState = state;
 
     }
 
@@ -54,6 +57,10 @@ public class IntakeSubsystem extends SubsystemBase {
             return true;
         }
         return false;
+    }
+
+    public boolean isExtended(){
+        return robotState.horizontalHeight == RobotStateSubsystem.HorizontalHeight.EXTENDED;
     }
 
     public double getTopDistance(){

@@ -14,7 +14,11 @@ public class IntakeAdvanceCommand extends CommandBase {
 
     @Override
     public void initialize(){
-        this.intakeSubsystem.IntakeAdvance();
+
+        //check the robot state - can we advance?
+        if(!this.intakeSubsystem.isExtended()) {
+            this.intakeSubsystem.IntakeAdvance();
+        }
     }
     @Override
     public boolean isFinished(){

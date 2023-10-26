@@ -13,7 +13,7 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     private int EXTENDED_POS = 1750;
     private int RETRACT_POS = 10;
 
-    public VerticalSlideSubsystem(HardwareMap map){
+    public VerticalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         verticalMotor = map.get(DcMotorEx.class, "verticalSlide");
         verticalMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     }
@@ -28,6 +28,24 @@ public class VerticalSlideSubsystem extends SubsystemBase {
         verticalMotor.setTargetPosition(RETRACT_POS - 20);
         verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         verticalMotor.setPower(1);
+    }
+
+    public void Position1(){
+        //TODO: Work out the Position 1 pos
+    }
+
+    public boolean IsPosition1(){
+        //TODO: check to ensure that the encoders are past Pos 1 and lower than Pos 2
+        return true;
+    }
+
+    public void Position2(){
+        //TODO: Move to Pos 2 (this all the way up?)
+    }
+
+    public boolean IsPosition2(){
+        //TODO: check to ensure that we are greater than Pos 2
+        return true;
     }
 
     public boolean IsExtended(){

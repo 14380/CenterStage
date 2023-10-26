@@ -7,7 +7,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class WinchSubsystem extends SubsystemBase {
     private DcMotorEx winchMotor;
 
-    public WinchSubsystem(HardwareMap map){
+    public WinchSubsystem(HardwareMap map, RobotStateSubsystem state)
+    {
         winchMotor = map.get(DcMotorEx.class, "winch");
     }
 

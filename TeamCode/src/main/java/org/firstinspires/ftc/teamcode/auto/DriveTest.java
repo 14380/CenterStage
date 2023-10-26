@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
+import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -26,7 +27,7 @@ public class DriveTest extends AutoOpBase {
                 robot, null, telemetry);
 
         //Set the starting position of the robot
-        Pose2d startingPosition = new Pose2d(72, 0, Math.toRadians(0));
+        Pose2d startingPosition = new Pose2d(0, 0, Math.toRadians(0));
 
         drive.setPoseEstimate(startingPosition);
 
@@ -41,7 +42,13 @@ public class DriveTest extends AutoOpBase {
 
         CommandScheduler.getInstance().schedule(
                 new WaitUntilCommand(this::isStarted).andThen(
-                        parkFollower
+                        parkFollower,
+                        new InstantCommand( () -> {
+                            telemetry.addData("x", drive.getPoseEstimate().getX());
+                            telemetry.addData("y", drive.getPoseEstimate().getY());
+                            telemetry.addData("heading", drive.getPoseEstimate().getHeading());
+                            telemetry.update();
+                        })
                 ));
 
     }
