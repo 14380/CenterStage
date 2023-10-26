@@ -82,12 +82,13 @@ public class ArmSubsystem extends SubsystemBase {
         AnalogInput aiArm = map.get(AnalogInput.class, "armEncoder");
         armEncoder = new AbsoluteAnalogEncoder(aiArm);
 
-        rotateServo.setPosition(0);
+        rotateServo.setPosition(-0.1);
 
         armEncoder.zero(2.4);
         armEncoder.setWraparound(true);
 
         robotState = state;
+        constraints = new ProfileConstraints(1,0.5,0.5);
 
     }
 
@@ -164,6 +165,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void ArmAngle(double angle){
+
+        this.profile = new AsymmetricMotionProfile(armEncoder.getCurrentPosition(), angle, constraints);
 
         armTargetPos = angle;
     }
