@@ -40,13 +40,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean IsTopCovered(){
 
-        if(timer.milliseconds() > 100) {
+       /* if(timer.milliseconds() > 100) {
             cachedDistance = sensorDistanceTop.getDistance(DistanceUnit.MM);
             timer.reset();
         }
         if (cachedDistance <= 15) {
             return true;
-        }
+        }*/
         return false;
     }
 

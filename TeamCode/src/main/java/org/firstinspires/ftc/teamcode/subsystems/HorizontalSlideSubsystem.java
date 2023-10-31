@@ -16,6 +16,8 @@ public class HorizontalSlideSubsystem extends SubsystemBase {
     public HorizontalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         horizontalMotor = map.get(DcMotorEx.class, "horizontalSlide");
         horizontalMotor.setDirection(DcMotorSimple.Direction.FORWARD);
+        horizontalMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        horizontalMotor.setPower(0);
     }
 
     public void Extend(){

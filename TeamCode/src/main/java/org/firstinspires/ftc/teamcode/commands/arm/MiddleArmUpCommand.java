@@ -23,6 +23,6 @@ public class MiddleArmUpCommand extends CommandBase {
     @Override
     public boolean isFinished(){
 
-        return armSubsystem.IsArmUp();
+        return true;
     }
 }

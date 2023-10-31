@@ -10,6 +10,7 @@ public class RobotStateSubsystem extends SubsystemBase {
     }
 
     public enum VerticalHeight{
+        ARM,
         DOWN,
         UP,
         POS1,

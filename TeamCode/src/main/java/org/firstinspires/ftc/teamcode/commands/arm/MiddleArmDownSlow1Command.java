@@ -4,27 +4,23 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 
-public class UnlockTransferCommand extends CommandBase {
+public class MiddleArmDownSlow1Command extends CommandBase {
 
     private ArmSubsystem armSubsystem;
 
-    public UnlockTransferCommand(ArmSubsystem arm){
+    public MiddleArmDownSlow1Command(ArmSubsystem arm){
         armSubsystem = arm;
 
     }
 
     @Override
     public void initialize() {
-        armSubsystem.UnlockLinkage();
+        armSubsystem.HomeTransferSlow();
     }
-
-
 
     @Override
     public boolean isFinished(){
 
-
-        return true;
+        return this.armSubsystem.IsArmHome();
     }
-
 }
