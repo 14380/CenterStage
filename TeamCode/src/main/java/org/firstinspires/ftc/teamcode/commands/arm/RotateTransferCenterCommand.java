@@ -4,11 +4,11 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 
-public class ArmRightCommand extends CommandBase {
+public class RotateTransferCenterCommand extends CommandBase {
 
     private ArmSubsystem armSubsystem;
 
-    public ArmRightCommand(ArmSubsystem arm){
+    public RotateTransferCenterCommand(ArmSubsystem arm){
         armSubsystem = arm;
         addRequirements(arm);
     }
@@ -16,13 +16,13 @@ public class ArmRightCommand extends CommandBase {
     @Override
     public void initialize() {
 
-        armSubsystem.ArmRightPosition();
+        armSubsystem.HomeTransferRotate();
     }
 
     @Override
     public boolean isFinished(){
 
-        return this.armSubsystem.IsArmRight();
+        return true;
     }
 
 

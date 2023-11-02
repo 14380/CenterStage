@@ -10,7 +10,7 @@ public class MiddleArmDownSlow1Command extends CommandBase {
 
     public MiddleArmDownSlow1Command(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

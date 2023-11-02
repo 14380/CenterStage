@@ -10,7 +10,7 @@ public class ArmExtendoOutCommand extends CommandBase {
 
     public ArmExtendoOutCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

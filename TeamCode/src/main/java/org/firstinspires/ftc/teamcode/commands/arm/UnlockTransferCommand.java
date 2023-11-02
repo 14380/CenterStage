@@ -10,7 +10,7 @@ public class UnlockTransferCommand extends CommandBase {
 
     public UnlockTransferCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

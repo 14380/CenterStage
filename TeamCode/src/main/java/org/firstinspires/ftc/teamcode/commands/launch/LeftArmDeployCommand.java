@@ -3,19 +3,26 @@ package org.firstinspires.ftc.teamcode.commands.launch;
 import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.LauncherSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.WinchSubsystem;
 
 public class LeftArmDeployCommand extends CommandBase {
 
-    private LauncherSubsystem launcherSubsystem;
+    private WinchSubsystem launcherSubsystem;
 
-    public LeftArmDeployCommand(LauncherSubsystem launch){
+    public LeftArmDeployCommand(WinchSubsystem launch){
         launcherSubsystem = launch;
     }
 
     @Override
     public void initialize(){
 
-        this.launcherSubsystem.LeftDeployArm();
+        this.launcherSubsystem.DeployLeftHooks();
+    }
+    @Override
+    public boolean isFinished(){
+
+
+        return true;
     }
 
 }

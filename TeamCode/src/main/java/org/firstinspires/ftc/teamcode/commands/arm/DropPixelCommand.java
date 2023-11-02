@@ -10,7 +10,7 @@ public class DropPixelCommand extends CommandBase {
 
     public DropPixelCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

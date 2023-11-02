@@ -10,7 +10,7 @@ public class PixelCloseCommand extends CommandBase {
 
     public PixelCloseCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

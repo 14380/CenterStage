@@ -13,9 +13,12 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     private int EXTENDED_POS = 1750;
     private int RETRACT_POS = 10;
 
+    //position 1 of the vertical slides.
     private int POS_1_HEIGHT = 800;
 
-    private int POS_2_HEIGHT = 1400;
+    //this is the height of position 2 of the vertical slides.
+    //This CAN NOT GO HIGHER than 1750 - EXTENDED_POS
+    private int POS_2_HEIGHT = 1600;
 
     public VerticalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         verticalMotor = map.get(DcMotorEx.class, "verticalSlide");
@@ -44,6 +47,15 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     public boolean IsPosition1(){
 
         return verticalMotor.getCurrentPosition() >= (POS_1_HEIGHT - 20);
+    }
+
+    public boolean HasMoveFrom1to2Completed(){
+
+        if(verticalMotor.getCurrentPosition() > POS_1_HEIGHT && (verticalMotor.getCurrentPosition() < (POS_1_HEIGHT + 100)))
+        {
+            return true;
+        }
+        return false;
     }
 
     public void Position2(){

@@ -10,7 +10,7 @@ public class ArmExtendoLockCommand extends CommandBase {
 
     public ArmExtendoLockCommand(ArmSubsystem arm) {
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

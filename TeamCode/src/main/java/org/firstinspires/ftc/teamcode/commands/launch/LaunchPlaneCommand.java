@@ -18,4 +18,11 @@ public class LaunchPlaneCommand extends CommandBase {
         this.launcherSubsystem.LaunchPlane();
     }
 
+    @Override
+    public boolean isFinished(){
+
+
+        return true;
+    }
+
 }

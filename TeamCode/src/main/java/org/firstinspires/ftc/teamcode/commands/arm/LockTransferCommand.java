@@ -10,7 +10,7 @@ public class LockTransferCommand extends CommandBase {
 
     public LockTransferCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

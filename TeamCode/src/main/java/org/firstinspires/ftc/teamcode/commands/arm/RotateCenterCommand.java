@@ -10,7 +10,7 @@ public class RotateCenterCommand  extends CommandBase {
 
     public RotateCenterCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

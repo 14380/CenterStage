@@ -41,27 +41,30 @@ public class StagedVerticalCommand extends CommandBase {
         {
             if(this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.DOWN)
             {
-                if (this.slideSubsystem.IsPosition1()) {
+                boolean pos1Result = this.slideSubsystem.IsPosition1();
+                if (pos1Result) {
                     this.state.verticalHeight = RobotStateSubsystem.VerticalHeight.POS1;
                 }
 
-                return this.slideSubsystem.IsPosition1();
+                return pos1Result;
             }
             else if(this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.POS1){
 
-                if (this.slideSubsystem.IsPosition2()) {
+                boolean pos2Result = this.slideSubsystem.IsPosition2();
+                if (pos2Result) {
                     this.state.verticalHeight = RobotStateSubsystem.VerticalHeight.POS2;
                 }
 
-                return this.slideSubsystem.IsPosition2();
+                return pos2Result;
             }
             else if(this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.POS2){
 
-                if (this.slideSubsystem.IsPosition1() && !this.slideSubsystem.IsPosition2()) {
+                boolean result = this.slideSubsystem.HasMoveFrom1to2Completed();
+                if (result) {
                     this.state.verticalHeight = RobotStateSubsystem.VerticalHeight.POS1;
                 }
 
-                return this.slideSubsystem.IsPosition1() && !this.slideSubsystem.IsPosition2();
+                return result;
             }
 
         }

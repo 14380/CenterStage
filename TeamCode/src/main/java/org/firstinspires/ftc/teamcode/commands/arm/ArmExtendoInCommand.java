@@ -11,6 +11,7 @@ public class ArmExtendoInCommand extends CommandBase {
     public ArmExtendoInCommand(ArmSubsystem arm) {
         armSubsystem = arm;
 
+        addRequirements(arm);
     }
 
     @Override

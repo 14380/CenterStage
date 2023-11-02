@@ -10,7 +10,7 @@ public class ArmLeftCommand extends CommandBase {
 
     public ArmLeftCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

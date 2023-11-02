@@ -10,7 +10,7 @@ public class MiddleArmUpCommand extends CommandBase {
 
     public MiddleArmUpCommand(ArmSubsystem arm){
         armSubsystem = arm;
-
+        addRequirements(arm);
     }
 
     @Override

@@ -38,12 +38,22 @@ public class ArmSubsystem extends SubsystemBase {
 
     private RobotStateSubsystem robotState;
 
-    //this is the arm rotation mount
+    //this is the arm rotation mount - this is the SAR230 bar in the middle
     public static double MIDDLE_ROTATE_POS = 0.475; //higher moves to the left
 
+    //Dobule servo arms that raise the transfer
     public static double ARM_SERVO_HOME = 0.1;
 
+    //the home rotation amount for the transfer servo
     public static double TRANSFER_ROTATE = 0.5;
+
+    //rotation the amount needed for the transfer to rotate and be level in the right position
+    public static double RIGHT_TRANSFER_ROTATE = 0;
+
+    //rotation amount for the left hand side of the transfer rotation.
+    public static double LEFT_TRANSFER_ROTATE = 1;
+
+
 
     public ArmSubsystem(HardwareMap map, RobotStateSubsystem state){
         linkageServo = map.get(ServoImplEx.class, "linkage");
@@ -90,14 +100,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     }
 
-    public double getTransferAInput(){
 
-        return transferEncoder.getCurrentPosition();
-    }
-
-    public double getArmAngle(){
-        return armEncoder.getCurrentPosition();
-    }
 
     public void LockLinkage(){
         //lock the transfer into the intake
@@ -133,8 +136,8 @@ public class ArmSubsystem extends SubsystemBase {
         //need to work out a system, i.e. 90 degrees is middle, < 90 is left, > 90 is right
     }
 
-    public void TransferAngle(double angle){
-        transferServo.setPosition(angle);
+    public void HomeTransferRotate(){
+        transferServo.setPosition(TRANSFER_ROTATE);
     }
 
     public void HomeTransfer(){
@@ -168,7 +171,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void ArmLeftPosition(){
-        //TODO: find the left position of the servo
+
         rotateServo.setPosition(0);
     }
 
@@ -184,13 +187,21 @@ public class ArmSubsystem extends SubsystemBase {
     }
 
     public void ArmRightPosition(){
-        //TODO: find the right position of the servo
-        rotateServo.setPosition(0.7);
+
+        rotateServo.setPosition(1);
+    }
+
+    public void TransferLeftRotate(){
+        transferServo.setPosition(LEFT_TRANSFER_ROTATE);
     }
 
     public boolean IsArmRight(){
         //TODO: find encoder position of the right arm servo.
         return true;
+    }
+
+    public void TransferRightRotate(){
+        transferServo.setPosition(RIGHT_TRANSFER_ROTATE);
     }
 
     public void ExtendoIn(){
