@@ -13,6 +13,10 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     private int EXTENDED_POS = 1750;
     private int RETRACT_POS = 10;
 
+    private int POS_1_HEIGHT = 800;
+
+    private int POS_2_HEIGHT = 1400;
+
     public VerticalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         verticalMotor = map.get(DcMotorEx.class, "verticalSlide");
         verticalMotor.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -26,27 +30,30 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     }
 
     public void Retract(){
-        verticalMotor.setTargetPosition(RETRACT_POS - 20);
+        verticalMotor.setTargetPosition(RETRACT_POS);
         verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         verticalMotor.setPower(1);
     }
 
     public void Position1(){
-        //TODO: Work out the Position 1 pos
+        verticalMotor.setTargetPosition(POS_1_HEIGHT);
+        verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotor.setPower(1);
     }
 
     public boolean IsPosition1(){
-        //TODO: check to ensure that the encoders are past Pos 1 and lower than Pos 2
-        return true;
+
+        return verticalMotor.getCurrentPosition() >= (POS_1_HEIGHT - 20);
     }
 
     public void Position2(){
-        //TODO: Move to Pos 2 (this all the way up?)
+        verticalMotor.setTargetPosition(POS_2_HEIGHT);
+        verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotor.setPower(1);
     }
 
     public boolean IsPosition2(){
-        //TODO: check to ensure that we are greater than Pos 2
-        return true;
+        return verticalMotor.getCurrentPosition() >= (POS_2_HEIGHT - 20);
     }
 
     public boolean IsExtended(){
@@ -58,7 +65,7 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     }
 
     public boolean IsRetracted(){
-        return verticalMotor.getCurrentPosition() < RETRACT_POS;
+        return verticalMotor.getCurrentPosition() <= (RETRACT_POS + 25);
     }
 }
 

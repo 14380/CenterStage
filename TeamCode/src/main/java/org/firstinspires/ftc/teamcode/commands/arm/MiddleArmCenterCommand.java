@@ -21,6 +21,6 @@ public class MiddleArmCenterCommand extends CommandBase {
     @Override
     public boolean isFinished(){
 
-        return this.armSubsystem.IsArmUpInMiddle();
+        return true;
     }
 }

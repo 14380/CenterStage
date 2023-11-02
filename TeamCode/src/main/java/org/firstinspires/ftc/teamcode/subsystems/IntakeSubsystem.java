@@ -27,7 +27,7 @@ public class IntakeSubsystem extends SubsystemBase {
     public IntakeSubsystem(HardwareMap map, RobotStateSubsystem state){
         intakeMotor = map.get(DcMotorEx.class, "intake");
         intakeServo = map.get(CRServo.class, "intakeServo");
-        sensorDistanceTop = map.get(DistanceSensor.class, "topC");
+        //sensorDistanceTop = map.get(DistanceSensor.class, "topC");
         //sensorDistanceBottom = map.get(DistanceSensor.class, "bottomC");
         timer = new ElapsedTime();
 

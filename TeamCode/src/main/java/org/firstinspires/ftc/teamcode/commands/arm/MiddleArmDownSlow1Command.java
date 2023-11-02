@@ -21,6 +21,6 @@ public class MiddleArmDownSlow1Command extends CommandBase {
     @Override
     public boolean isFinished(){
 
-        return this.armSubsystem.IsArmHome();
+        return true;
     }
 }

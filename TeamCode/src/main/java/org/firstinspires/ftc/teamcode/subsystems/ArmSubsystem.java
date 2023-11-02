@@ -64,19 +64,20 @@ public class ArmSubsystem extends SubsystemBase {
         armServo.setDirection(Servo.Direction.REVERSE);
 
         //not sure if axon max's need a custom PWM range - can't hurt to set
-        armRightServo.setPwmRange(new PwmControl.PwmRange(505, 2495));
-        armServo.setPwmRange(new PwmControl.PwmRange(505, 2495));
+        //armRightServo.setPwmRange(new PwmControl.PwmRange(505, 2495));
+        //armServo.setPwmRange(new PwmControl.PwmRange(505, 2495));
 
         rotateServo.setPosition(MIDDLE_ROTATE_POS);
         hornServo.setPosition(0);
         transferServo.setPosition(TRANSFER_ROTATE);
         linkageServo.setPosition(0);
 
-        armServo.setPosition(ARM_SERVO_HOME);
+
 
         //Be sure to set the reverse direction before calling the set position method.
         armRightServo.setDirection(Servo.Direction.REVERSE);
         armRightServo.setPosition(ARM_SERVO_HOME);
+        armServo.setPosition(ARM_SERVO_HOME);
 
         robotState = state;
 
@@ -184,7 +185,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ArmRightPosition(){
         //TODO: find the right position of the servo
-        rotateServo.setPosition(1);
+        rotateServo.setPosition(0.7);
     }
 
     public boolean IsArmRight(){

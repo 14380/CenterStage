@@ -15,6 +15,7 @@ package org.firstinspires.ftc.teamcode.teleop;
         import com.arcrobotics.ftclib.command.ParallelCommandGroup;
         import com.arcrobotics.ftclib.command.SequentialCommandGroup;
         import com.arcrobotics.ftclib.command.WaitCommand;
+        import com.arcrobotics.ftclib.command.button.Trigger;
         import com.arcrobotics.ftclib.gamepad.GamepadEx;
         import com.arcrobotics.ftclib.gamepad.GamepadKeys;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -42,10 +43,12 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
+        import org.firstinspires.ftc.teamcode.commands.launch.LaunchPlaneCommand;
         import org.firstinspires.ftc.teamcode.commands.vertical.ExtendVerticalCommand;
         import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
         import org.firstinspires.ftc.teamcode.commands.vertical.Pos2ExtendCommand;
         import org.firstinspires.ftc.teamcode.commands.vertical.RetractVerticalCommand;
+        import org.firstinspires.ftc.teamcode.commands.vertical.StagedVerticalCommand;
         import org.firstinspires.ftc.teamcode.commands.winch.DeployLeftHookCommand;
         import org.firstinspires.ftc.teamcode.commands.winch.DeployRightHookCommand;
         import org.firstinspires.ftc.teamcode.commands.winch.WinchOffCommand;
@@ -56,9 +59,12 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
+        import org.firstinspires.ftc.teamcode.subsystems.LauncherSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.RobotStateSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
         import org.firstinspires.ftc.teamcode.subsystems.WinchSubsystem;
+
+        import java.util.function.BooleanSupplier;
 
 @Config
 @TeleOp(group = "drive")
@@ -67,13 +73,17 @@ public class BBTeleOp extends CommandOpMode {
     private DriveCommand driveCommand;
     private IntakeSubsystem intakeSubsystem;
 
-    private HorizontalSlideSubsystem horizontalSlideSubsystem;
+    //private HorizontalSlideSubsystem horizontalSlideSubsystem;
 
     private VerticalSlideSubsystem verticalSlideSubsystem;
 
     private WinchSubsystem winchSubsystem;
 
     private ArmSubsystem armSubsystem;
+    private LauncherSubsystem launchSubsystem;
+
+
+    private DriveSubsystem driveSystem;
 
     private RobotStateSubsystem stateSubsystem;
 
@@ -96,10 +106,11 @@ public class BBTeleOp extends CommandOpMode {
         stateSubsystem = new RobotStateSubsystem();
 
         intakeSubsystem = new IntakeSubsystem(hardwareMap, stateSubsystem);
-        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem);
+       // horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem);
         winchSubsystem = new WinchSubsystem(hardwareMap, stateSubsystem);
         verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, stateSubsystem);
         armSubsystem = new ArmSubsystem(hardwareMap, stateSubsystem);
+        launchSubsystem = new LauncherSubsystem(hardwareMap, stateSubsystem);
 
 
 
@@ -109,7 +120,7 @@ public class BBTeleOp extends CommandOpMode {
 
 
 
-        DriveSubsystem driveSystem = new DriveSubsystem(
+        driveSystem = new DriveSubsystem(
                 mecDrive, gp1, telemetry);
 
 
@@ -164,7 +175,7 @@ public class BBTeleOp extends CommandOpMode {
                 )
         );
 
-        gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+       /* gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                     new IncExtendHorizontalCommand(horizontalSlideSubsystem),
                     new InstantCommand( () -> {
@@ -188,13 +199,13 @@ public class BBTeleOp extends CommandOpMode {
                         stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.RETRACTED;
                     })
             )
-        );
+        );*/
 
-        gp1.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
+        gp2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
             new DeployLeftHookCommand(winchSubsystem)
         );
 
-        gp1.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
+        gp2.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
                 new DeployRightHookCommand(winchSubsystem)
         );
 
@@ -202,35 +213,42 @@ public class BBTeleOp extends CommandOpMode {
         //Collapse the whole arm system depending on state.
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 new SequentialCommandGroup(
-                               // new MiddleArmCenterCommand(armSubsystem),
+
+
                                // new RotateCenterCommand(armSubsystem),
-                                new ArmExtendoInCommand(armSubsystem),
-                                new WaitCommand(100),
-                                new MiddleArmDownSlow1Command(armSubsystem),
-                                new WaitCommand(100),
-                                new MiddleArmDownCommand(armSubsystem),
-                                new RetractHorizontalCommand(horizontalSlideSubsystem),
-                                //new RetractVerticalCommand(verticalSlideSubsystem),
-                                //new WaitCommand(50),
-                               // new LockTransferCommand(armSubsystem),
-                                new PixelCloseCommand(armSubsystem),
+                               // new WaitCommand(80),
+
+                                new ParallelCommandGroup(
+                                        new ArmExtendoInCommand(armSubsystem),
+                                        new WaitCommand(100),
+                                        new RetractVerticalCommand(verticalSlideSubsystem, stateSubsystem),
+                                        new SequentialCommandGroup(
+                                                new MiddleArmDownSlow1Command(armSubsystem),
+                                                new WaitCommand(50),
+                                                new MiddleArmDownCommand(armSubsystem),
+                                                new PixelCloseCommand(armSubsystem)
+                                        )
+
+                                       ),
+
                         new InstantCommand(() ->{
                             stateSubsystem.middleArm = RobotStateSubsystem.MiddleArmState.DOWN;
                             stateSubsystem.verticalHeight = RobotStateSubsystem.VerticalHeight.DOWN;
+
                         })
                 )
 
         );
 
         //only work if the arm is up
-        /*gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
+        gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
                 new ConditionalCommand(
                     new ArmRightCommand(armSubsystem),
                         new InstantCommand(), //DO nothing
                         () ->{
-                        return true;//stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP;
+                        return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP;
                         })
-        );*/
+        );
 
         // only work if the arm is up
         /*gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
@@ -242,6 +260,30 @@ public class BBTeleOp extends CommandOpMode {
                         return true;//stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP;
                     })
         );*/
+
+
+        new Trigger(new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) > 0.5;
+            }
+        }).whenActive(new WinchOnCommand(winchSubsystem));
+
+
+        new Trigger(new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) > 0.5;
+            }
+        }).whenActive(new WinchReverseCommand(winchSubsystem));
+
+
+        new Trigger(new BooleanSupplier() {
+            @Override
+            public boolean getAsBoolean() {
+                return gp1.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) < 0.5 && gp1.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) < 0.5;
+            }
+        }).whenActive(new WinchOffCommand(winchSubsystem));
 
         //we first put the arm up,
         //if the arm is already up, then we move the slides up.
@@ -256,41 +298,38 @@ public class BBTeleOp extends CommandOpMode {
                                     stateSubsystem.middleArm = RobotStateSubsystem.MiddleArmState.UP;
                                 })
                         ),
-                        new InstantCommand(), //DO nothing
+                        new StagedVerticalCommand(verticalSlideSubsystem, stateSubsystem),
                         () ->{
-                            return true;//stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP;
+                            return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.DOWN;
                         })
         );
 
         //only work if the robot is in the delivery state
         gp1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
 
-            new ConditionalCommand(
-                    new DropPixelCommand(armSubsystem),
-
-                new InstantCommand(), //DO nothing
-                () ->{
-                    return true;//stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP;
-                })
+                new DropPixelCommand(armSubsystem)
         );
 
 
-        schedule(new InstantCommand(() -> telemetry.addData( "Hor", horizontalSlideSubsystem.getCurrentPosition() )));
+        //schedule(new InstantCommand(() -> telemetry.addData( "Hor", horizontalSlideSubsystem.getCurrentPosition() )));
         schedule(new InstantCommand(() -> telemetry.addData( "Vert", verticalSlideSubsystem.getCurrentPosition() )));
+        schedule(new InstantCommand(() -> telemetry.addData( "Arm State", stateSubsystem.middleArm )));
+        schedule(new InstantCommand(() -> telemetry.addData( "Vert State", stateSubsystem.verticalHeight )));
 
-        //schedule(new InstantCommand(() -> telemetry.addData( "Transfer", armSubsystem.getTransferAInput() )));
-
-        //schedule(new InstantCommand(() -> telemetry.addData( "Arm", armSubsystem.getArmAngle() )));
-
-
-        //schedule(new InstantCommand(() -> telemetry.addData( "Top", intakeSubsystem.getTopDistance() )));
-        //schedule(new InstantCommand(() -> telemetry.addData( "Bottom", intakeSubsystem.getBottomDistance() )));
 
         schedule(new InstantCommand(()-> telemetry.update()));
 
         //re-align the IMU - will this work with Odo Wheels?
         if(gp1.isDown(GamepadKeys.Button.A) && gp1.isDown(GamepadKeys.Button.B)) {
             mecDrive.setPoseEstimate(new Pose2d(0,0,0));
+            telemetry.addData("Align", "DONE");
+            telemetry.update();
+        }
+
+        if(gp2.isDown(GamepadKeys.Button.X) && gp2.isDown(GamepadKeys.Button.Y)) {
+            schedule(new LaunchPlaneCommand(launchSubsystem));
+            telemetry.addData("Paper", "Plane");
+            telemetry.update();
         }
 
     }
