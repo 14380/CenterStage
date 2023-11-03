@@ -5,7 +5,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class BlueFrontPartsRight {
+public class RedFrontTesting {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
 
@@ -13,10 +13,14 @@ public class BlueFrontPartsRight {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(15, 62, Math.toRadians(270)))
-                                .lineToSplineHeading(new Pose2d(15,32, Math.toRadians(220)))
-                                .lineToSplineHeading(new Pose2d(15,42, Math.toRadians(220)))
-                                .lineToSplineHeading(new Pose2d(50,30, Math.toRadians(180)))
+                        drive.trajectorySequenceBuilder(new Pose2d(15, -62, Math.toRadians(90)))
+                                .lineToSplineHeading(new Pose2d(15,-32, Math.toRadians(90)))
+                                .lineToSplineHeading(new Pose2d(15,-42, Math.toRadians(90)))
+                                //move back ready to make first move
+                                .lineToSplineHeading(new Pose2d(50, -35, Math.toRadians(180)))
+                                //move to in front of the stack
+                                //.lineToSplineHeading(new Pose2d(-30,0, Math.toRadians(180)))
+
                                 .build()
                 );
 

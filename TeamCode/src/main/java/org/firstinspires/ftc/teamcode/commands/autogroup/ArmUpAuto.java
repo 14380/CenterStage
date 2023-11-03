@@ -24,7 +24,7 @@ public class ArmUpAuto extends SequentialCommandGroup {
                 new InstantCommand(()->{
                     state.middleArm = RobotStateSubsystem.MiddleArmState.UP;
                 }),
-                new StagedVerticalCommand(vertSlide, state),
+                //new StagedVerticalCommand(vertSlide, state),
 
                 new ArmExtendoOutCommand(arm)
                // new StagedVerticalCommand(vertSlide, state)
