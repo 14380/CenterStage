@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.RobotStateSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
-public class ArmUpRightAuto extends SequentialCommandGroup {
+public class ArmUpAuto extends SequentialCommandGroup {
 
-    public ArmUpRightAuto(ArmSubsystem arm, VerticalSlideSubsystem vertSlide, RobotStateSubsystem state){
+    public ArmUpAuto(ArmSubsystem arm, VerticalSlideSubsystem vertSlide, RobotStateSubsystem state){
 
         addCommands(
 
@@ -25,10 +25,9 @@ public class ArmUpRightAuto extends SequentialCommandGroup {
                     state.middleArm = RobotStateSubsystem.MiddleArmState.UP;
                 }),
                 new StagedVerticalCommand(vertSlide, state),
-                new ArmLeftCommand(arm),
-                new ArmExtendoOutCommand(arm),
-                new RotateTransferLeftCommand(arm),
-                new StagedVerticalCommand(vertSlide, state)
+
+                new ArmExtendoOutCommand(arm)
+               // new StagedVerticalCommand(vertSlide, state)
         );
 
         addRequirements(arm, state);

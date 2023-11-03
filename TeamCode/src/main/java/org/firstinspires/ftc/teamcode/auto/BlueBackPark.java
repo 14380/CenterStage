@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
@@ -19,6 +20,7 @@ import org.firstinspires.ftc.teamcode.subsystems.RobotStateSubsystem;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(group = "drive")
+@Disabled
 public class BlueBackPark extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;

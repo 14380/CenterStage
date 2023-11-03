@@ -5,6 +5,7 @@ import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
@@ -12,6 +13,7 @@ import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 @Autonomous(group = "drive")
+@Disabled
 public class DriveTest extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
