@@ -14,12 +14,10 @@ public class RedMeepMeepTesting {
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-36, -62, Math.toRadians(90)))
-                                .lineToSplineHeading(new Pose2d(-42,-33, Math.toRadians(90)))
-                                //move back ready to make first move
-                                .lineToSplineHeading(new Pose2d(-30, -55, Math.toRadians(90)))
-                                //move to in front of the stack
-                                .lineToSplineHeading(new Pose2d(-30,0, Math.toRadians(180)))
-
+                                .lineToSplineHeading(new Pose2d(-28, -34, Math.toRadians(135)))
+                                .lineToSplineHeading(new Pose2d(-24, -45, Math.toRadians(135)))
+                                .lineToSplineHeading(new Pose2d(-24, -20, Math.toRadians(90)))
+                                //.lineToSplineHeading(new Pose2d(-24, -20, Math.toRadians(90)))
                                 .build()
                 );
 
