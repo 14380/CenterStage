@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.ServoImplEx;
 
 public class WinchSubsystem extends SubsystemBase {
@@ -17,6 +18,7 @@ public class WinchSubsystem extends SubsystemBase {
         leftDeployServo = map.get(ServoImplEx.class, "leftDeploy");
         rightDeployServo = map.get(ServoImplEx.class, "rightDeploy");
 
+        rightDeployServo.setDirection(Servo.Direction.REVERSE);
         leftDeployServo.setPosition(0);
         rightDeployServo.setPosition(0);
     }
@@ -33,11 +35,11 @@ public class WinchSubsystem extends SubsystemBase {
 
     public void DeployLeftHooks()
     {
-        leftDeployServo.setPosition(1);
+        leftDeployServo.setPosition(0.4);
     }
 
     public void DeployRightHooks()
     {
-        rightDeployServo.setPosition(1);
+        rightDeployServo.setPosition(0.4);
     }
 }

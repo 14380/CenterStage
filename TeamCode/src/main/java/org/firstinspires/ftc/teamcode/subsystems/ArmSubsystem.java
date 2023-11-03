@@ -39,10 +39,14 @@ public class ArmSubsystem extends SubsystemBase {
     private RobotStateSubsystem robotState;
 
     //this is the arm rotation mount - this is the SAR230 bar in the middle
-    public static double MIDDLE_ROTATE_POS = 0.475; //higher moves to the left
+    public static double MIDDLE_ROTATE_POS = 0.46; //higher moves to the left
 
     //Dobule servo arms that raise the transfer
     public static double ARM_SERVO_HOME = 0.1;
+
+    //this is the ARM Up position - i.e. ARM lifted - 1st up button press
+
+    public static double ARM_UP_POS = 0.99;
 
     //the home rotation amount for the transfer servo
     public static double TRANSFER_ROTATE = 0.5;
@@ -119,8 +123,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void ArmUp(){
         //move the arm upright
         //go a little over the upright position to align with the backdrop
-        armServo.setPosition(0.88);
-        armRightServo.setPosition(0.88);
+        armServo.setPosition(ARM_UP_POS);
+        armRightServo.setPosition(ARM_UP_POS);
     }
 
     public boolean IsArmUp(){

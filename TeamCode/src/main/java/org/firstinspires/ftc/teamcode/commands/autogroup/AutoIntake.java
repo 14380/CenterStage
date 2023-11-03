@@ -4,6 +4,7 @@ import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 
+import org.firstinspires.ftc.teamcode.commands.arm.LockTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.UnlockTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
@@ -18,19 +19,21 @@ import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 
 public class AutoIntake extends SequentialCommandGroup {
 
-    public AutoIntake(IntakeSubsystem intake){
+    public AutoIntake(IntakeSubsystem intake, ArmSubsystem arm){
 
         addCommands(
-
+                new LockTransferCommand(arm),
                 new IntakeOnCommand(intake),
-                new WaitCommand(1000),
+                new WaitCommand(1500),
                 new IntakeAdvanceCommand(intake),
                 new WaitCommand(1000),
-                new IntakeReverseCommand(intake),
+                new IntakeOnCommand(intake),
                 new WaitCommand(1500),
+                new IntakeReverseCommand(intake),
+                new WaitCommand(2500),
                 new IntakeOffCommand(intake)
         );
 
-        addRequirements(intake);
+        addRequirements(intake, arm);
     }
 }

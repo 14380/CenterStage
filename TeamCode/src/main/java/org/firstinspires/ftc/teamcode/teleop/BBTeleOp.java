@@ -204,8 +204,6 @@ public class BBTeleOp extends CommandOpMode {
         //Collapse the whole arm system depending on state.
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 new SequentialCommandGroup(
-
-
                                 new RotateTransferCenterCommand(armSubsystem),
                                 new WaitCommand(50),
                                 new RotateCenterCommand(armSubsystem),

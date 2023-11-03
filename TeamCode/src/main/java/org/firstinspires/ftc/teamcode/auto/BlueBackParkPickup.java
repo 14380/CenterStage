@@ -77,7 +77,8 @@ public class BlueBackParkPickup extends AutoOpBase {
                 //move back ready to make first move
                 .lineToSplineHeading(new Pose2d(-40, 55, Math.toRadians(270)))
                 //move to in front of the stack
-                .lineToSplineHeading(new Pose2d(-45,0, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-45,10, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-45,1, Math.toRadians(180)))
                 .build();
 
 
@@ -139,7 +140,7 @@ public class BlueBackParkPickup extends AutoOpBase {
                                         ),
                                         new SequentialCommandGroup(
                                             forwardFollower,
-                                                new AutoIntake(intakeSubsystem),
+                                                new AutoIntake(intakeSubsystem, armSubsystem),
                                                 backFollowerCenter,
                                                 new ArmUpRightAuto(armSubsystem, verticalSubsystem, state),
                                                 new DropPixelCommand(armSubsystem),
