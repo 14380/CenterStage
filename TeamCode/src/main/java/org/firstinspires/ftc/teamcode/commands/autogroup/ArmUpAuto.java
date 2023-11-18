@@ -23,11 +23,10 @@ public class ArmUpAuto extends SequentialCommandGroup {
                 new MiddleArmUpCommand(arm),
                 new InstantCommand(()->{
                     state.middleArm = RobotStateSubsystem.MiddleArmState.UP;
-                }),
-                //new StagedVerticalCommand(vertSlide, state),
+                }) //,
 
-                new ArmExtendoOutCommand(arm)
-               // new StagedVerticalCommand(vertSlide, state)
+                //new ArmExtendoOutCommand(arm) // STATES: Changed to no extendo
+
         );
 
         addRequirements(arm, state);

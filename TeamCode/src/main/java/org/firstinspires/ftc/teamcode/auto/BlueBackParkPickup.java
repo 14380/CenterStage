@@ -102,15 +102,15 @@ public class BlueBackParkPickup extends AutoOpBase {
         //these are the three parking positions at the rear of the field
         //duplicated for each location, the starting paths are very similar.
         TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveToRight.end())
-                .lineToSplineHeading(new Pose2d(64, 4, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62, 4, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
-                .lineToSplineHeading(new Pose2d(64, 12, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62, 12, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveForward.end())
-                .lineToSplineHeading(new Pose2d(64, 7, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62, 7, Math.toRadians(180)))
                 .build();
 
 

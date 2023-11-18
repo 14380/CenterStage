@@ -100,15 +100,15 @@ public class RedBack extends AutoOpBase {
         //these are the three parking positions at the rear of the field
         //duplicated for each location, the starting paths are very similar.
         TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveToRight.end())
-                .lineToSplineHeading(new Pose2d(64, -18, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62, -18, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
-                .lineToSplineHeading(new Pose2d(64, -14, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62, -14, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveForward.end())
-                .lineToSplineHeading(new Pose2d(64, -16, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62, -16, Math.toRadians(180)))
                 .build();
 
 

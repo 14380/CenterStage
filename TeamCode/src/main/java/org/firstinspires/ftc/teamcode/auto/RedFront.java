@@ -99,7 +99,7 @@ public class RedFront extends AutoOpBase {
 
         //simple movement to move close to the backdrop
         TrajectorySequence moveSlowCenter = drive.trajectorySequenceBuilder(moveForward.end())
-                .lineToSplineHeading(new Pose2d(60,-25, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(61,-25, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveSlowLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
@@ -107,7 +107,7 @@ public class RedFront extends AutoOpBase {
                 .build();
 
         TrajectorySequence moveSlowRight = drive.trajectorySequenceBuilder(moveToRight.end())
-                .lineToSplineHeading(new Pose2d(60,-33, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(61,-33, Math.toRadians(180)))
                 .build();
 
         //these are the three parking positions at the rear of the field

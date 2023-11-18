@@ -7,23 +7,23 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.NoEncoderBBMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
-public class DriveSubsystem extends SubsystemBase {
+public class NoEncDriveSubsystem extends SubsystemBase {
 
-    BotBuildersMecanumDrive driveBase;
+    NoEncoderBBMecanumDrive driveBase;
     GamepadEx gp1;
     Telemetry telemetry;
 
-    public DriveSubsystem(BotBuildersMecanumDrive drive, GamepadEx gamepad, Telemetry tele) {
+    public NoEncDriveSubsystem(NoEncoderBBMecanumDrive drive, GamepadEx gamepad, Telemetry tele) {
 
         gp1 = gamepad;
         driveBase = drive;
@@ -115,7 +115,7 @@ public class DriveSubsystem extends SubsystemBase {
         Pose2d vel = new Pose2d(
                 input.getX(),
                 input.getY(),
-                -(rightX.getAsDouble()) * 0.6 //TODO: Look at rotation speed.
+                -(rightX.getAsDouble())  //TODO: Look at rotation speed.
         );
 
         // driveBase.DumpData(telemetry);

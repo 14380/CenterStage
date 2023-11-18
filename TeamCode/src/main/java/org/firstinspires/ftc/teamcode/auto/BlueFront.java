@@ -98,29 +98,33 @@ public class BlueFront extends AutoOpBase {
 
         //simple movement to move close to the backdrop
         TrajectorySequence moveSlowCenter = drive.trajectorySequenceBuilder(moveForward.end())
-                .lineToSplineHeading(new Pose2d(61,25, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62,25, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveSlowLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
-                .lineToSplineHeading(new Pose2d(61,33, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62,33, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveSlowRight = drive.trajectorySequenceBuilder(moveToRight.end())
-                .lineToSplineHeading(new Pose2d(61,20, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(62,20, Math.toRadians(180)))
                 .build();
 
         //these are the three parking positions at the rear of the field
         //duplicated for each location, the starting paths are very similar.
         TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveSlowRight.end())
-                .lineToSplineHeading(new Pose2d(55, 52, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55, 20, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
                 .build();
 
         TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveSlowLeft.end())
-                .lineToSplineHeading(new Pose2d(55, 52, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55, 33, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
                 .build();
 
         TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveSlowCenter.end())
-                .lineToSplineHeading(new Pose2d(55, 52, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55, 25, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
+                //.lineToSplineHeading(new Pose2d(51, 20, Math.toRadians(270)))
                 .build();
 
 
@@ -152,7 +156,7 @@ public class BlueFront extends AutoOpBase {
                                         moveToBDSlowLeftFollower,
                                         new WaitCommand(1000),
                                         new DropPixelCommand(armSubsystem),
-                                        new WaitCommand(1500),
+                                        new WaitCommand(500),
                                         new ArmDownAuto(armSubsystem, verticalSubsystem, state),
                                         new WaitCommand(1000),
                                         backFollowerLeft
@@ -166,7 +170,7 @@ public class BlueFront extends AutoOpBase {
                                                 moveToBDSlowRightFollower,
                                                 new WaitCommand(1000),
                                                 new DropPixelCommand(armSubsystem),
-                                                new WaitCommand(1500),
+                                                new WaitCommand(500),
                                                 new ArmDownAuto(armSubsystem, verticalSubsystem, state),
                                                 new WaitCommand(1000),
                                                 backFollowerRight
@@ -178,7 +182,7 @@ public class BlueFront extends AutoOpBase {
                                                 moveToBDSlowCenterFollower,
                                                 new WaitCommand(1000),
                                                 new DropPixelCommand(armSubsystem),
-                                                new WaitCommand(1500),
+                                                new WaitCommand(500),
                                                 new ArmDownAuto(armSubsystem, verticalSubsystem, state),
                                                 new WaitCommand(1000),
                                                 backFollowerCenter
