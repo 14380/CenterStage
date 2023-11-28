@@ -4,25 +4,25 @@ import com.arcrobotics.ftclib.command.CommandBase;
 
 import org.firstinspires.ftc.teamcode.subsystems.HorizontalSlideSubsystem;
 
-public class IncExtendHorizontalCommand extends CommandBase {
+public class ZeroOffHorizontalCommand extends CommandBase {
 
     private HorizontalSlideSubsystem slideSubsystem;
 
-    public IncExtendHorizontalCommand(HorizontalSlideSubsystem slide){
+    public ZeroOffHorizontalCommand(HorizontalSlideSubsystem slide){
         this.slideSubsystem = slide;
     }
 
     @Override
     public void initialize(){
 
-        slideSubsystem.ManualExtend(1);
+        slideSubsystem.ManualZeroPower();
 
     }
 
     @Override
     public boolean isFinished(){
 
-        return true;//this.slideSubsystem.IsExtended();
+        return true;
     }
 
 

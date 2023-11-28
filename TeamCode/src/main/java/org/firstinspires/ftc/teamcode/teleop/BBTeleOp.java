@@ -42,6 +42,7 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.commands.horizontal.IncExtendHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.IncOffHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.RetractHorizontalCommand;
+        import org.firstinspires.ftc.teamcode.commands.horizontal.ZeroOffHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
@@ -78,7 +79,7 @@ public class BBTeleOp extends CommandOpMode {
     private DriveCommand driveCommand;
     private IntakeSubsystem intakeSubsystem;
 
-    //private HorizontalSlideSubsystem horizontalSlideSubsystem;
+    private HorizontalSlideSubsystem horizontalSlideSubsystem;
 
     private VerticalSlideSubsystem verticalSlideSubsystem;
 
@@ -111,7 +112,7 @@ public class BBTeleOp extends CommandOpMode {
         stateSubsystem = new RobotStateSubsystem();
 
         intakeSubsystem = new IntakeSubsystem(hardwareMap, stateSubsystem);
-       // horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem);
         winchSubsystem = new WinchSubsystem(hardwareMap, stateSubsystem);
         verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, stateSubsystem);
         armSubsystem = new ArmSubsystem(hardwareMap, stateSubsystem);
@@ -172,7 +173,7 @@ public class BBTeleOp extends CommandOpMode {
         gp1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
 
                  new ConditionalCommand(
-                        new IntakeAdvanceCommand(intakeSubsystem),
+                         new UnlockTransferCommand(armSubsystem),
                          new ArmExtendoOutCommand(armSubsystem),
                     () ->{
                         return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.DOWN;
@@ -199,6 +200,34 @@ public class BBTeleOp extends CommandOpMode {
                            telemetry.update();
                         }))
         );
+
+
+        gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+                new SequentialCommandGroup(
+                        new IncExtendHorizontalCommand(horizontalSlideSubsystem),
+                        new InstantCommand( () -> {
+                            stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.EXTENDED;
+                        })
+                )
+        ).whenReleased(
+                new SequentialCommandGroup(
+                        new IncOffHorizontalCommand(horizontalSlideSubsystem)
+                       /* new InstantCommand( () -> {
+                            stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.EXTENDED;
+                        })*/
+                )
+        );
+
+        gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+                        new SequentialCommandGroup(
+                                new RetractHorizontalCommand(horizontalSlideSubsystem),
+                                new ZeroOffHorizontalCommand(horizontalSlideSubsystem),
+                                new InstantCommand( () -> {
+                                    stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.RETRACTED;
+                                })
+                        )
+                );
+
 
 
         //Collapse the whole arm system depending on state.
@@ -306,6 +335,12 @@ public class BBTeleOp extends CommandOpMode {
         schedule(new InstantCommand(() -> telemetry.addData( "Vert", verticalSlideSubsystem.getCurrentPosition() )));
         schedule(new InstantCommand(() -> telemetry.addData( "Arm State", stateSubsystem.middleArm )));
         schedule(new InstantCommand(() -> telemetry.addData( "Vert State", stateSubsystem.verticalHeight )));
+        schedule(new InstantCommand(() -> telemetry.addData( "Horizontal State", stateSubsystem.horizontalHeight )));
+
+        schedule(new InstantCommand(() -> telemetry.addData( "Top", intakeSubsystem.IntakeSensor1() )));
+
+        schedule(new InstantCommand(() -> telemetry.addData( "Bottom", intakeSubsystem.IntakeSensor2())));
+
 
 
         schedule(new InstantCommand(()-> telemetry.update()));

@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commands.arm.DropPixelCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpAuto;
-import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpRightAuto;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
@@ -25,7 +24,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class BlueFront extends AutoOpBase {
+public class WaitBlueBackParkSimple extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;
@@ -34,10 +33,13 @@ public class BlueFront extends AutoOpBase {
 
     private RobotStateSubsystem state;
 
+    private IntakeSubsystem intake;
     private IntakeSubsystem intakeSubsystem;
     private ArmSubsystem armSubsystem;
 
     private VerticalSlideSubsystem verticalSubsystem;
+    private TrajectorySequenceFollowerCommand moveToBDSlowRightFollower;
+
 
 
     private TrajectorySequenceFollowerCommand forwardFollower;
@@ -48,12 +50,6 @@ public class BlueFront extends AutoOpBase {
     private TrajectorySequenceFollowerCommand backFollowerRight;
     private TrajectorySequenceFollowerCommand backFollowerCenter;
 
-
-    private TrajectorySequenceFollowerCommand moveToBDSlowCenterFollower;
-    private TrajectorySequenceFollowerCommand moveToBDSlowLeftFollower;
-    private TrajectorySequenceFollowerCommand moveToBDSlowRightFollower;
-
-
     @Override
     public void initialize() {
         robot = new BotBuildersMecanumDrive(hardwareMap);
@@ -62,70 +58,66 @@ public class BlueFront extends AutoOpBase {
 
         state = new RobotStateSubsystem();
 
-        intakeSubsystem = new IntakeSubsystem(hardwareMap, state);
+        intake = new IntakeSubsystem(hardwareMap, state);
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, state);
         verticalSubsystem = new VerticalSlideSubsystem(hardwareMap, state);
 
         //Set the starting position of the robot
-        Pose2d startingPosition = new Pose2d(15, 62, Math.toRadians(270));
+        Pose2d startingPosition = new Pose2d(-36, 62, Math.toRadians(270));
 
         drive.setPoseEstimate(startingPosition);
 
         //standard random forward movement.
         TrajectorySequence moveForward = drive.trajectorySequenceBuilder(startingPosition)
                 //push forward, slightly to the right of center
-                .lineToSplineHeading(new Pose2d(15,32, Math.toRadians(270)))
-                .lineToSplineHeading(new Pose2d(15,42, Math.toRadians(270)))
-                .lineToSplineHeading(new Pose2d(55,25, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-28,33, Math.toRadians(270)))
+                //move back ready to make first move
+                .lineToSplineHeading(new Pose2d(-40, 55, Math.toRadians(270)))
+                //move to in front of the stack
+                .lineToSplineHeading(new Pose2d(-45,0, Math.toRadians(180)))
                 .build();
 
 
         //this is our standard left hand random move
         TrajectorySequence moveToLeft = drive.trajectorySequenceBuilder(startingPosition)
-                .lineToSplineHeading(new Pose2d(10,32, Math.toRadians(310)))
-                .lineToSplineHeading(new Pose2d(10,52, Math.toRadians(310)))
-                .lineToSplineHeading(new Pose2d(55,33, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-28, 38, Math.toRadians(300)))
+                .lineToSplineHeading(new Pose2d(-40, 55, Math.toRadians(270)))
+                //move to in front of the stack
+                .lineToSplineHeading(new Pose2d(-45,0, Math.toRadians(180)))
                 .build();
 
 
         //this is our starting right hand random move
         TrajectorySequence moveToRight = drive.trajectorySequenceBuilder(startingPosition)
-                .lineToSplineHeading(new Pose2d(15,32, Math.toRadians(220)))
-                .lineToSplineHeading(new Pose2d(15,42, Math.toRadians(220)))
-                .lineToSplineHeading(new Pose2d(55,20, Math.toRadians(180)))
-                .build();
-
-        //simple movement to move close to the backdrop
-        TrajectorySequence moveSlowCenter = drive.trajectorySequenceBuilder(moveForward.end())
-                .lineToSplineHeading(new Pose2d(62,25, Math.toRadians(180)))
-                .build();
-
-        TrajectorySequence moveSlowLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
-                .lineToSplineHeading(new Pose2d(62,33, Math.toRadians(180)))
-                .build();
-
-        TrajectorySequence moveSlowRight = drive.trajectorySequenceBuilder(moveToRight.end())
-                .lineToSplineHeading(new Pose2d(62,20, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-40, 38, Math.toRadians(250)))
+                .lineToSplineHeading(new Pose2d(-30, 40, Math.toRadians(270)))
+                .lineToSplineHeading(new Pose2d(-30, 15, Math.toRadians(270)))
+                //move to in front of the stack
+                .lineToSplineHeading(new Pose2d(-45,5, Math.toRadians(180)))
                 .build();
 
         //these are the three parking positions at the rear of the field
         //duplicated for each location, the starting paths are very similar.
-        TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveSlowRight.end())
-                .lineToSplineHeading(new Pose2d(55, 20, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
+        TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveToRight.end())
+                .lineToSplineHeading(new Pose2d(59, 4, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(55,20, Math.toRadians(180)))
                 .build();
 
-        TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveSlowLeft.end())
-                .lineToSplineHeading(new Pose2d(55, 33, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
+        TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
+                .lineToSplineHeading(new Pose2d(59, 4, Math.toRadians(180)))
                 .build();
 
-        TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveSlowCenter.end())
-                .lineToSplineHeading(new Pose2d(55, 25, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(55, 20, Math.toRadians(270)))
-                //.lineToSplineHeading(new Pose2d(51, 20, Math.toRadians(270)))
+        TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveForward.end())
+                .lineToSplineHeading(new Pose2d(60,20, Math.toRadians(180)))
                 .build();
+
+
+        TrajectorySequence moveSlowRight = drive.trajectorySequenceBuilder(moveToBackDropParkRight.end())
+                .lineToSplineHeading(new Pose2d(65,20, Math.toRadians(180)))
+                .build();
+
+        moveToBDSlowRightFollower = new TrajectorySequenceFollowerCommand(drive, moveSlowRight);
 
 
         forwardFollower = new TrajectorySequenceFollowerCommand(drive, moveForward);
@@ -136,12 +128,6 @@ public class BlueFront extends AutoOpBase {
         backFollowerRight = new TrajectorySequenceFollowerCommand(drive, moveToBackDropParkRight);
         backFollowerCenter = new TrajectorySequenceFollowerCommand(drive, moveToBackDropParkCenter);
 
-
-        moveToBDSlowCenterFollower = new TrajectorySequenceFollowerCommand(drive, moveSlowCenter);
-        moveToBDSlowLeftFollower = new TrajectorySequenceFollowerCommand(drive, moveSlowLeft);
-        moveToBDSlowRightFollower = new TrajectorySequenceFollowerCommand(drive, moveSlowRight);
-
-
         //wait for the op mode to start, then execute our paths.
 
         CommandScheduler.getInstance().schedule(
@@ -150,43 +136,24 @@ public class BlueFront extends AutoOpBase {
                         new ConditionalCommand(
                                 new SequentialCommandGroup(
                                         leftFollower,
-
-                                        new ArmUpAuto(armSubsystem, verticalSubsystem, state),
-                                        new WaitCommand(500),
-                                        moveToBDSlowLeftFollower,
-                                        new WaitCommand(300),
-                                        new DropPixelCommand(armSubsystem),
-                                        new WaitCommand(250),
-                                        new ArmDownAuto(armSubsystem, verticalSubsystem, state),
-                                        new WaitCommand(500),
                                         backFollowerLeft
                                 ),
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
                                             rightFollower,
-                                              //
-                                                new ArmUpAuto(armSubsystem, verticalSubsystem, state),
-                                                new WaitCommand(500),
-                                                moveToBDSlowRightFollower,
-                                                new WaitCommand(300),
-                                                new DropPixelCommand(armSubsystem),
-                                                new WaitCommand(250),
-                                                new ArmDownAuto(armSubsystem, verticalSubsystem, state),
-                                                new WaitCommand(500),
-                                                backFollowerRight
+                                                backFollowerRight,
+                                                    new ArmUpAuto(armSubsystem, verticalSubsystem, state),
+                                                    new WaitCommand(500),
+                                                    moveToBDSlowRightFollower,
+                                                    new WaitCommand(300),
+                                                    new DropPixelCommand(armSubsystem),
+                                                    new WaitCommand(250),
+                                                    new ArmDownAuto(armSubsystem, verticalSubsystem, state),
+                                                    new WaitCommand(500)
                                         ),
                                         new SequentialCommandGroup(
                                             forwardFollower,
-                                                new ArmUpAuto(armSubsystem, verticalSubsystem, state),
-                                                new WaitCommand(500),
-                                                moveToBDSlowCenterFollower,
-                                                new WaitCommand(300),
-                                                new DropPixelCommand(armSubsystem),
-                                                new WaitCommand(250),
-                                                new ArmDownAuto(armSubsystem, verticalSubsystem, state),
-                                                new WaitCommand(500),
                                                 backFollowerCenter
-
                                         ),
                                         ()->{
                                             return visionSubsystem.getPosition() == CenterStageVisionProcessor.StartingPosition.RIGHT;
