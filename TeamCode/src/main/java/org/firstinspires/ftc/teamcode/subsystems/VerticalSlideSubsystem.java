@@ -23,6 +23,9 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     //This CAN NOT GO HIGHER than 1750 - EXTENDED_POS
     private int POS_2_HEIGHT = 1600;
 
+    //first position of the slide lift.
+    private int POS_0_HEIGHT = 300;
+
     public VerticalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         verticalMotor = map.get(DcMotorEx.class, "verticalSlide");
         verticalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -64,6 +67,15 @@ public class VerticalSlideSubsystem extends SubsystemBase {
         return verticalMotor.getCurrentPosition() >= (AUTO_HEIGHT - 20);
     }
 
+
+    public boolean HasMoveFrom0to1Completed(){
+
+        if(verticalMotor.getCurrentPosition() > POS_0_HEIGHT && (verticalMotor.getCurrentPosition() < (POS_0_HEIGHT + 100)))
+        {
+            return true;
+        }
+        return false;
+    }
     public boolean HasMoveFrom1to2Completed(){
 
         if(verticalMotor.getCurrentPosition() > POS_1_HEIGHT && (verticalMotor.getCurrentPosition() < (POS_1_HEIGHT + 100)))
@@ -75,6 +87,16 @@ public class VerticalSlideSubsystem extends SubsystemBase {
 
     public void Position2(){
         verticalMotor.setTargetPosition(POS_2_HEIGHT);
+        verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotor.setPower(1);
+    }
+
+    public boolean IsPosition0(){
+        return verticalMotor.getCurrentPosition() >= (POS_0_HEIGHT - 20);
+    }
+
+    public void Position0(){
+        verticalMotor.setTargetPosition(POS_0_HEIGHT);
         verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         verticalMotor.setPower(1);
     }

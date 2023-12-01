@@ -21,8 +21,12 @@ public class StagedVerticalCommand extends CommandBase {
 
         if(this.state.middleArm == RobotStateSubsystem.MiddleArmState.UP && this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.DOWN){
 
-            this.slideSubsystem.Position1();
+            this.slideSubsystem.Position0();
 
+        }
+        else if(this.state.middleArm == RobotStateSubsystem.MiddleArmState.UP && this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.POS0){
+
+            this.slideSubsystem.Position1();
         }
         else if(this.state.middleArm == RobotStateSubsystem.MiddleArmState.UP && this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.POS1){
 
@@ -41,7 +45,17 @@ public class StagedVerticalCommand extends CommandBase {
         {
             if(this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.DOWN)
             {
-                boolean pos1Result = this.slideSubsystem.IsPosition1();
+
+                boolean pos0Result = this.slideSubsystem.IsPosition0();
+                if (pos0Result) {
+                    this.state.verticalHeight = RobotStateSubsystem.VerticalHeight.POS0;
+                }
+
+                return pos0Result;
+            }
+            else if(this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.POS0){
+
+                boolean pos1Result = this.slideSubsystem.HasMoveFrom0to1Completed();
                 if (pos1Result) {
                     this.state.verticalHeight = RobotStateSubsystem.VerticalHeight.POS1;
                 }

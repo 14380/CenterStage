@@ -13,6 +13,7 @@ public class RobotStateSubsystem extends SubsystemBase {
         ARM,
         DOWN,
         UP,
+        POS0,
         POS1,
         POS2
     }

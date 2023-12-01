@@ -21,6 +21,7 @@ package org.firstinspires.ftc.teamcode.teleop;
         import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
         import com.qualcomm.robotcore.hardware.DcMotor;
 
+        import org.apache.commons.math3.analysis.function.Sin;
         import org.firstinspires.ftc.teamcode.commands.arm.ArmExtendoInCommand;
         import org.firstinspires.ftc.teamcode.commands.arm.ArmExtendoOutCommand;
         import org.firstinspires.ftc.teamcode.commands.arm.ArmLeftCommand;
@@ -36,6 +37,7 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferCenterCommand;
         import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferLeftCommand;
         import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferRightCommand;
+        import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropCommand;
         import org.firstinspires.ftc.teamcode.commands.arm.UnlockTransferCommand;
         import org.firstinspires.ftc.teamcode.commands.drive.DriveCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.ExtendHorizontalCommand;
@@ -171,6 +173,8 @@ public class BBTeleOp extends CommandOpMode {
                 //intake off.
                 new IntakeOffCommand(intakeSubsystem)
         );
+
+
 
         gp2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenPressed(
                 new ExtendPurpleCommand(intakeSubsystem),
@@ -349,7 +353,25 @@ public class BBTeleOp extends CommandOpMode {
         //TODO:only work if the robot is in the delivery state
         gp1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
                 //Jusr open the pixel bay door at the moment.
-                new DropPixelCommand(armSubsystem)
+                //new DropPixelCommand(armSubsystem)
+                new ConditionalCommand(
+                        new SinglePixelDropCommand(armSubsystem),
+                        new WaitCommand(1),
+                        ()->{
+                            if(stateSubsystem.verticalHeight == RobotStateSubsystem.VerticalHeight.POS0 ||
+                                    stateSubsystem.verticalHeight == RobotStateSubsystem.VerticalHeight.UP ||
+                                    stateSubsystem.verticalHeight == RobotStateSubsystem.VerticalHeight.POS1 ||
+                                    stateSubsystem.verticalHeight == RobotStateSubsystem.VerticalHeight.POS2 ||
+                                    stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP
+                            )
+                            {
+                                return true;
+                            }else{
+                                return false;
+                            }
+                        }
+                )
+
         );
 
 

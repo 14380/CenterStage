@@ -59,19 +59,11 @@ public class BlueBackdropMiddle extends AutoOpBase {
     private TrajectorySequenceFollowerCommand leftFollower;
     private TrajectorySequenceFollowerCommand rightFollower;
 
-    private TrajectorySequenceFollowerCommand backFollowerLeft;
-    private TrajectorySequenceFollowerCommand backFollowerRight;
-    private TrajectorySequenceFollowerCommand backFollowerCenter;
-
-
     private TrajectorySequenceFollowerCommand movePixelToCenterFollower;
     private TrajectorySequenceFollowerCommand movePixelToLeftFollower;
     private TrajectorySequenceFollowerCommand movePixelToRightFollower;
 
 
-    private TrajectorySequenceFollowerCommand moveToPathCenterFollower;
-    private TrajectorySequenceFollowerCommand moveToPathLeftFollower;
-    private TrajectorySequenceFollowerCommand moveToPathRightFollower;
 
 
     @Override
@@ -103,10 +95,16 @@ public class BlueBackdropMiddle extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(30,12, Math.toRadians(180)))
                 .build();
 
-
-        //move down to the stack, drive slowly on top of it.
-        TrajectorySequence moveCenterPath = drive.trajectorySequenceBuilder(movePixelToCenter.end())
+        //move into the center of the field, ready to go down to the stack,
+        //this is a common position for all of the routes (left, center, right).
+        TrajectorySequence moveIntoCenterPosition = drive.trajectorySequenceBuilder(movePixelToCenter.end())
                 .lineToSplineHeading(new Pose2d(38, -1, Math.toRadians(175)))
+                .build();
+
+
+        //move down to the stack for the center pos, drive slowly on top of it.
+        TrajectorySequence moveCenterPath = drive.trajectorySequenceBuilder(moveIntoCenterPosition.end())
+
                 .lineToSplineHeading(new Pose2d(-45, 11.5, Math.toRadians(175)))
                 .lineToSplineHeading(new Pose2d(-56,11.5, Math.toRadians(175)),
                         BotBuildersMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
@@ -139,15 +137,6 @@ public class BlueBackdropMiddle extends AutoOpBase {
         TrajectorySequence moveOffBackdrop = drive.trajectorySequenceBuilder(moveBackWithSideGame.end())
 
                 .lineToSplineHeading(new Pose2d(55, 4, Math.toRadians(175)))
-                //.lineToSplineHeading(new Pose2d(20, 2, Math.toRadians(175)))
-                .build();
-
-
-        TrajectorySequence moveOntoPixel = drive.trajectorySequenceBuilder(moveCenterPath.end())
-
-                .lineToSplineHeading(new Pose2d(-54,12, Math.toRadians(175)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToSplineHeading(new Pose2d(-47.5, 12, Math.toRadians(175)))
                 .build();
 
 
@@ -157,8 +146,12 @@ public class BlueBackdropMiddle extends AutoOpBase {
                 .build();
 
         TrajectorySequence movePixelToLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
-                // .lineToSplineHeading(new Pose2d(62,25, Math.toRadians(180)))
                 .lineToSplineHeading(new Pose2d(38,16, Math.toRadians(180)))
+                .build();
+
+        TrajectorySequence moveLeftIntoMovePos = drive.trajectorySequenceBuilder(movePixelToLeft.end())
+                .lineToSplineHeading(new Pose2d(50,16, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(38, -1, Math.toRadians(175)))
                 .build();
 
 
@@ -173,32 +166,16 @@ public class BlueBackdropMiddle extends AutoOpBase {
                         BotBuildersMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
 
-        //these are the three parking positions at the rear of the field
-        //duplicated for each location, the starting paths are very similar.
-        TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(movePixelToRight.end())
-                .lineToSplineHeading(new Pose2d(55, 20, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
+        TrajectorySequence moveToCenterRight = drive.trajectorySequenceBuilder(movePixelToRight.end())
+                .lineToSplineHeading(new Pose2d(38, -1, Math.toRadians(175)))
                 .build();
 
-        TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(movePixelToRight.end())
-                .lineToSplineHeading(new Pose2d(55, 33, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(51, 60, Math.toRadians(270)))
-                .build();
 
-        TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(movePixelToCenter.end())
-                .lineToSplineHeading(new Pose2d(55, 25, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(55, 20, Math.toRadians(270)))
-                //.lineToSplineHeading(new Pose2d(51, 20, Math.toRadians(270)))
-                .build();
 
 
         forwardFollower = new TrajectorySequenceFollowerCommand(drive, moveForwardCenter);
         leftFollower = new TrajectorySequenceFollowerCommand(drive, moveToLeft);
         rightFollower = new TrajectorySequenceFollowerCommand(drive, moveToRight);
-
-        backFollowerLeft = new TrajectorySequenceFollowerCommand(drive, moveToBackDropParkLeft);
-        backFollowerRight = new TrajectorySequenceFollowerCommand(drive, moveToBackDropParkRight);
-        backFollowerCenter = new TrajectorySequenceFollowerCommand(drive, moveToBackDropParkCenter);
 
 
         movePixelToCenterFollower = new TrajectorySequenceFollowerCommand(drive, movePixelToCenter);
@@ -206,21 +183,43 @@ public class BlueBackdropMiddle extends AutoOpBase {
         movePixelToRightFollower = new TrajectorySequenceFollowerCommand(drive, movePixelToRight);
 
 
-        moveToPathCenterFollower = new TrajectorySequenceFollowerCommand(drive, moveCenterPath);
+        TrajectorySequenceFollowerCommand moveToPathCenterFollower = new TrajectorySequenceFollowerCommand(drive, moveCenterPath);
+        TrajectorySequenceFollowerCommand moveToPathRightFollower = new TrajectorySequenceFollowerCommand(drive, moveCenterPath);
+        TrajectorySequenceFollowerCommand moveToPathLeftFollower = new TrajectorySequenceFollowerCommand(drive, moveCenterPath);
 
-        TrajectorySequenceFollowerCommand moveToStackFollower = new TrajectorySequenceFollowerCommand(drive, moveOntoPixel);
 
         TrajectorySequenceFollowerCommand moveOffStackFollower = new TrajectorySequenceFollowerCommand(drive, moveOffStackTraj);
+        TrajectorySequenceFollowerCommand moveOffStackLeftFollower = new TrajectorySequenceFollowerCommand(drive, moveOffStackTraj);
+        TrajectorySequenceFollowerCommand moveOffStackRightFollower = new TrajectorySequenceFollowerCommand(drive, moveOffStackTraj);
+
 
         TrajectorySequenceFollowerCommand moveBackToBackdropFollower = new TrajectorySequenceFollowerCommand(drive, backToBackDrop);
+        TrajectorySequenceFollowerCommand moveBackToBackdropLeftFollower = new TrajectorySequenceFollowerCommand(drive, backToBackDrop);
+        TrajectorySequenceFollowerCommand moveBackToBackdropRightFollower = new TrajectorySequenceFollowerCommand(drive, backToBackDrop);
+
+
         TrajectorySequenceFollowerCommand moveBackToBackdropFollower2 = new TrajectorySequenceFollowerCommand(drive, backToBackDrop2);
+        TrajectorySequenceFollowerCommand moveBackToBackdropLeftFollower2 = new TrajectorySequenceFollowerCommand(drive, backToBackDrop2);
+        TrajectorySequenceFollowerCommand moveBackToBackdropRightFollower2 = new TrajectorySequenceFollowerCommand(drive, backToBackDrop2);
+
 
         TrajectorySequenceFollowerCommand backwithSideGameFollower = new TrajectorySequenceFollowerCommand(drive, moveBackWithSideGame);
+        TrajectorySequenceFollowerCommand backwithSideGameLeftFollower = new TrajectorySequenceFollowerCommand(drive, moveBackWithSideGame);
+        TrajectorySequenceFollowerCommand backwithSideGameRightFollower = new TrajectorySequenceFollowerCommand(drive, moveBackWithSideGame);
+
 
         TrajectorySequenceFollowerCommand moveOffSideGame = new TrajectorySequenceFollowerCommand(drive, moveOffBackdrop);
-        //
+        TrajectorySequenceFollowerCommand moveOffSideGameLeft = new TrajectorySequenceFollowerCommand(drive, moveOffBackdrop);
+        TrajectorySequenceFollowerCommand moveOffSideGameRight = new TrajectorySequenceFollowerCommand(drive, moveOffBackdrop);
+
+
+        //these are the three centering positions.
+        TrajectorySequenceFollowerCommand moveLeftToMovePosition = new TrajectorySequenceFollowerCommand(drive, moveLeftIntoMovePos);
+        TrajectorySequenceFollowerCommand moveToCenterFollower = new TrajectorySequenceFollowerCommand(drive, moveIntoCenterPosition);
+        TrajectorySequenceFollowerCommand moveToCenterRightFollower = new TrajectorySequenceFollowerCommand(drive, moveToCenterRight);
 
         //load the pixel pusher
+
 
         intakeSubsystem.ExtendPurple();
 
@@ -245,7 +244,45 @@ public class BlueBackdropMiddle extends AutoOpBase {
                                         new ArmDownAuto(armSubsystem, verticalSubsystem, state),
                                         new WaitCommand(500),
                                         movePixelToLeftFollower,
-                                        new RetractPurpleCommand(intakeSubsystem)
+                                        new RetractPurpleCommand(intakeSubsystem),
+                                        moveLeftToMovePosition,
+                                        moveToPathLeftFollower,
+                                        new LockTransferCommand(armSubsystem),
+                                        //we have now driven onto and off the stack
+                                        // turn the intake on, give it a second
+                                        //then keep the intake on and move forward slowly
+                                        new SequentialCommandGroup(
+                                                //this is where we
+                                                new IntakeOnCommand(intakeSubsystem),
+                                                new WaitCommand(1000),
+                                                moveOffStackLeftFollower,
+                                                new WaitCommand(500),
+                                                new ParallelCommandGroup(
+                                                        moveBackToBackdropLeftFollower,
+                                                        new SequentialCommandGroup(
+                                                                new WaitCommand(1800),
+                                                                new IntakeOffCommand(intakeSubsystem)
+                                                        )
+                                                ),
+                                                new UnlockTransferCommand(armSubsystem),
+
+                                                new ParallelCommandGroup(
+                                                        new SequentialCommandGroup(
+                                                                new MiddleArmUpCommand(armSubsystem),
+                                                                new Pos1ExtendCommand(verticalSubsystem)
+                                                        ),
+                                                        moveBackToBackdropLeftFollower2
+                                                ),
+                                                new ArmUpRightAuto(armSubsystem, verticalSubsystem, state),
+                                                new WaitCommand(500),
+                                                backwithSideGameLeftFollower,
+                                                new DropPixelCommand(armSubsystem),
+                                                new WaitCommand(800),
+                                                moveOffSideGameLeft,
+                                                new ArmDownAuto(armSubsystem, verticalSubsystem, state)
+
+
+                                        )
                                         ),
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
@@ -263,7 +300,45 @@ public class BlueBackdropMiddle extends AutoOpBase {
                                                 new ArmDownAuto(armSubsystem, verticalSubsystem, state),
                                                 new WaitCommand(500),
                                                 movePixelToRightFollower,
-                                                new RetractPurpleCommand(intakeSubsystem)
+                                                new RetractPurpleCommand(intakeSubsystem),
+                                                moveToCenterRightFollower,
+                                                moveToPathRightFollower,
+                                                new LockTransferCommand(armSubsystem),
+                                                //we have now driven onto and off the stack
+                                                // turn the intake on, give it a second
+                                                //then keep the intake on and move forward slowly
+                                                new SequentialCommandGroup(
+                                                        //this is where we
+                                                        new IntakeOnCommand(intakeSubsystem),
+                                                        new WaitCommand(1000),
+                                                        moveOffStackRightFollower,
+                                                        new WaitCommand(500),
+                                                        new ParallelCommandGroup(
+                                                                moveBackToBackdropRightFollower,
+                                                                new SequentialCommandGroup(
+                                                                        new WaitCommand(1800),
+                                                                        new IntakeOffCommand(intakeSubsystem)
+                                                                )
+                                                        ),
+                                                        new UnlockTransferCommand(armSubsystem),
+
+                                                        new ParallelCommandGroup(
+                                                                new SequentialCommandGroup(
+                                                                        new MiddleArmUpCommand(armSubsystem),
+                                                                        new Pos1ExtendCommand(verticalSubsystem)
+                                                                ),
+                                                                moveBackToBackdropRightFollower2
+                                                        ),
+                                                        new ArmUpRightAuto(armSubsystem, verticalSubsystem, state),
+                                                        new WaitCommand(500),
+                                                        backwithSideGameRightFollower,
+                                                        new DropPixelCommand(armSubsystem),
+                                                        new WaitCommand(800),
+                                                        moveOffSideGameRight,
+                                                        new ArmDownAuto(armSubsystem, verticalSubsystem, state)
+
+
+                                                )
                                         ),
                                         new SequentialCommandGroup(
                                                 new ParallelCommandGroup(
@@ -275,8 +350,7 @@ public class BlueBackdropMiddle extends AutoOpBase {
                                                     )
                                                 ),
                                                 new WaitCommand(500),
-                                                //moveToBDSlowCenterFollower,
-                                                //new WaitCommand(300),
+
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(250),
                                                 new ArmDownAuto(armSubsystem, verticalSubsystem, state),
@@ -284,6 +358,7 @@ public class BlueBackdropMiddle extends AutoOpBase {
                                                 movePixelToCenterFollower,
                                                 new RetractPurpleCommand(intakeSubsystem),
                                                 new ZeroOffHorizontalCommand(horizontalSlideSubsystem),
+                                                moveToCenterFollower,
                                                 moveToPathCenterFollower,
                                                 new LockTransferCommand(armSubsystem),
                                                 //we have now driven onto and off the stack
