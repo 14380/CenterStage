@@ -43,10 +43,12 @@ package org.firstinspires.ftc.teamcode.teleop;
         import org.firstinspires.ftc.teamcode.commands.horizontal.IncOffHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.RetractHorizontalCommand;
         import org.firstinspires.ftc.teamcode.commands.horizontal.ZeroOffHorizontalCommand;
+        import org.firstinspires.ftc.teamcode.commands.intake.ExtendPurpleCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
         import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
+        import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
         import org.firstinspires.ftc.teamcode.commands.launch.LaunchPlaneCommand;
         import org.firstinspires.ftc.teamcode.commands.launch.LeftArmDeployCommand;
         import org.firstinspires.ftc.teamcode.commands.launch.RightArmDeployCommand;
@@ -93,13 +95,10 @@ public class BBTeleOp extends CommandOpMode {
 
     private RobotStateSubsystem stateSubsystem;
 
-    private IntakeOnCommand intakeOnCommand;
     private GamepadEx gp1;
     private GamepadEx gp2;
     private BotBuildersMecanumDrive mecDrive;
 
-    public static double transferSetpoint = 0;
-    public static double armSetpoint = 0;
 
 
     @Override
@@ -107,10 +106,14 @@ public class BBTeleOp extends CommandOpMode {
         CommandScheduler.getInstance().reset();
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
+        //use the BB mecanum drive
         mecDrive = new BotBuildersMecanumDrive(hardwareMap);
 
+        //we need to keep the robot state
         stateSubsystem = new RobotStateSubsystem();
 
+        //load all of our subsystems
         intakeSubsystem = new IntakeSubsystem(hardwareMap, stateSubsystem);
         horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem);
         winchSubsystem = new WinchSubsystem(hardwareMap, stateSubsystem);
@@ -126,8 +129,7 @@ public class BBTeleOp extends CommandOpMode {
 
 
 
-        driveSystem = new DriveSubsystem(
-                mecDrive, gp1, telemetry);
+        driveSystem = new DriveSubsystem(mecDrive, gp1, telemetry);
 
 
         driveCommand = new DriveCommand(
@@ -136,6 +138,7 @@ public class BBTeleOp extends CommandOpMode {
         );
 
 
+        //drive command is the default command
         schedule(driveCommand);
 
 
@@ -169,7 +172,13 @@ public class BBTeleOp extends CommandOpMode {
                 new IntakeOffCommand(intakeSubsystem)
         );
 
+        gp2.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).toggleWhenPressed(
+                new ExtendPurpleCommand(intakeSubsystem),
+                new RetractPurpleCommand(intakeSubsystem)
+        );
+
         //conditional transfer, or extendo when the arm is up
+        //this lowers the linkage so we can fit under the stage door without bumping
         gp1.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
 
                  new ConditionalCommand(
@@ -182,6 +191,7 @@ public class BBTeleOp extends CommandOpMode {
         );
 
 
+        //deploy the left hook arms.
         gp2.getGamepadButton(GamepadKeys.Button.LEFT_STICK_BUTTON).whenPressed(
 
             new SequentialCommandGroup(
@@ -192,6 +202,7 @@ public class BBTeleOp extends CommandOpMode {
                 }))
         );
 
+        //deploy the right hook arms
         gp2.getGamepadButton(GamepadKeys.Button.RIGHT_STICK_BUTTON).whenPressed(
                 new SequentialCommandGroup(
                 new RightArmDeployCommand(winchSubsystem),
@@ -201,25 +212,30 @@ public class BBTeleOp extends CommandOpMode {
                         }))
         );
 
-
+        //move the horizontal slides out when the button is pressed.
+        //update the state on the last command to extended
         gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
+                        new UnlockTransferCommand(armSubsystem),
                         new IncExtendHorizontalCommand(horizontalSlideSubsystem),
                         new InstantCommand( () -> {
                             stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.EXTENDED;
                         })
                 )
         ).whenReleased(
+                //we send the off command, which sets power to zero
+                //our zero power behaviour on this motor is to hold.
                 new SequentialCommandGroup(
                         new IncOffHorizontalCommand(horizontalSlideSubsystem)
-                       /* new InstantCommand( () -> {
-                            stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.EXTENDED;
-                        })*/
+
                 )
         );
 
+        //retract the horizontal slides all the way back into the robot.
+        //update the state on the last command.
         gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                         new SequentialCommandGroup(
+                                new UnlockTransferCommand(armSubsystem),
                                 new RetractHorizontalCommand(horizontalSlideSubsystem),
                                 new ZeroOffHorizontalCommand(horizontalSlideSubsystem),
                                 new InstantCommand( () -> {
@@ -231,6 +247,7 @@ public class BBTeleOp extends CommandOpMode {
 
 
         //Collapse the whole arm system depending on state.
+        //this is done in a sequence that won't cause any collisions
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_DOWN).whenPressed(
                 new SequentialCommandGroup(
                                 new RotateTransferCenterCommand(armSubsystem),
@@ -246,6 +263,7 @@ public class BBTeleOp extends CommandOpMode {
                                 new PixelCloseCommand(armSubsystem),
 
                         new InstantCommand(() ->{
+                            //update the state of the arm to all down.
                             stateSubsystem.middleArm = RobotStateSubsystem.MiddleArmState.DOWN;
                             stateSubsystem.verticalHeight = RobotStateSubsystem.VerticalHeight.DOWN;
 
@@ -258,20 +276,22 @@ public class BBTeleOp extends CommandOpMode {
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_RIGHT).whenPressed(
                 new ConditionalCommand(
                         new SequentialCommandGroup(
+                                //TODO: make the slides rise just a little
                             new ArmRightCommand(armSubsystem),
                             new RotateTransferRightCommand(armSubsystem)
                         ),
-                        new InstantCommand(), //DO nothing
+                        new InstantCommand(), //DO nothing the arm isn't up
                         () ->{
                         return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.UP;
                         })
         );
 
-        // only work if the arm is up
+        // only work if the arm is up - move to the left of the robot.
         gp1.getGamepadButton(GamepadKeys.Button.DPAD_LEFT).whenPressed(
 
             new ConditionalCommand(
                     new SequentialCommandGroup(
+                            //TODO: make the slides rise just a bit
                         new ArmLeftCommand(armSubsystem),
                         new RotateTransferLeftCommand(armSubsystem)
                             ),
@@ -281,7 +301,7 @@ public class BBTeleOp extends CommandOpMode {
                     })
         );
 
-
+        //the triggers will control the winching system, only turn on when the button is active.
         new Trigger(new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
@@ -289,7 +309,7 @@ public class BBTeleOp extends CommandOpMode {
             }
         }).whenActive(new WinchOnCommand(winchSubsystem));
 
-
+        //Reverse the winching motor
         new Trigger(new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
@@ -298,6 +318,7 @@ public class BBTeleOp extends CommandOpMode {
         }).whenActive(new WinchReverseCommand(winchSubsystem));
 
 
+        //check to see if none of the buttons are pressed, we turn off the motor in this case.
         new Trigger(new BooleanSupplier() {
             @Override
             public boolean getAsBoolean() {
@@ -318,20 +339,22 @@ public class BBTeleOp extends CommandOpMode {
                                     stateSubsystem.middleArm = RobotStateSubsystem.MiddleArmState.UP;
                                 })
                         ),
+                        //the staged vertical command will move the arm up, then pos1, pos2 .. back to pos1 etc
                         new StagedVerticalCommand(verticalSlideSubsystem, stateSubsystem),
                         () ->{
                             return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.DOWN;
                         })
         );
 
-        //only work if the robot is in the delivery state
+        //TODO:only work if the robot is in the delivery state
         gp1.getGamepadButton(GamepadKeys.Button.X).whenPressed(
-
+                //Jusr open the pixel bay door at the moment.
                 new DropPixelCommand(armSubsystem)
         );
 
 
-        //schedule(new InstantCommand(() -> telemetry.addData( "Hor", horizontalSlideSubsystem.getCurrentPosition() )));
+
+        schedule(new InstantCommand(() -> telemetry.addData( "Hor", horizontalSlideSubsystem.getCurrentPosition() )));
         schedule(new InstantCommand(() -> telemetry.addData( "Vert", verticalSlideSubsystem.getCurrentPosition() )));
         schedule(new InstantCommand(() -> telemetry.addData( "Arm State", stateSubsystem.middleArm )));
         schedule(new InstantCommand(() -> telemetry.addData( "Vert State", stateSubsystem.verticalHeight )));

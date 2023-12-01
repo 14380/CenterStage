@@ -18,7 +18,8 @@ public class WinchSubsystem extends SubsystemBase {
         leftDeployServo = map.get(ServoImplEx.class, "leftDeploy");
         rightDeployServo = map.get(ServoImplEx.class, "rightDeploy");
 
-        rightDeployServo.setDirection(Servo.Direction.REVERSE);
+        //rightDeployServo.setDirection(Servo.Direction.REVERSE);
+        leftDeployServo.setDirection(Servo.Direction.REVERSE);
         leftDeployServo.setPosition(0);
         rightDeployServo.setPosition(0);
     }

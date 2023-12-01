@@ -10,12 +10,12 @@ public class HorizontalSlideSubsystem extends SubsystemBase {
 
     private DcMotorEx horizontalMotor;
 
-    private int EXTENDED_POS = 1050;
+    private int EXTENDED_POS = 1950;
     private int RETRACT_POS = 35;
 
     public HorizontalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         horizontalMotor = map.get(DcMotorEx.class, "horizontalSlide");
-        horizontalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //horizontalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         horizontalMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         horizontalMotor.setPower(0);
 
@@ -58,7 +58,7 @@ public class HorizontalSlideSubsystem extends SubsystemBase {
     }
 
     public boolean IsExtended(){
-        return horizontalMotor.getCurrentPosition() >= EXTENDED_POS;
+        return horizontalMotor.getCurrentPosition() >= (EXTENDED_POS - 150);
     }
 
     public int getCurrentPosition(){

@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.commands.arm.ArmLeftCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferLeftCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.UnlockTransferCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.StagedVerticalCommand;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.RobotStateSubsystem;
@@ -24,11 +25,12 @@ public class ArmUpRightAuto extends SequentialCommandGroup {
                 new InstantCommand(()->{
                     state.middleArm = RobotStateSubsystem.MiddleArmState.UP;
                 }),
-                new StagedVerticalCommand(vertSlide, state),
+                //new StagedVerticalCommand(vertSlide, state),
+                new Pos1ExtendCommand(vertSlide),
                 new ArmLeftCommand(arm),
                 new ArmExtendoOutCommand(arm),
-                new RotateTransferLeftCommand(arm),
-                new StagedVerticalCommand(vertSlide, state)
+                new RotateTransferLeftCommand(arm)
+                //new StagedVerticalCommand(vertSlide, state)
         );
 
         addRequirements(arm, state);

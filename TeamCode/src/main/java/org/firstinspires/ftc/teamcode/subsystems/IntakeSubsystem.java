@@ -29,6 +29,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
     private Servo intakeGate;
 
+    private Servo purplePixel;
+
     private RobotStateSubsystem robotState;
 
     public IntakeSubsystem(HardwareMap map, RobotStateSubsystem state){
@@ -36,8 +38,11 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeServo = map.get(CRServo.class, "intakeServo");
         intake1 = map.get(DigitalChannel.class, "intake1");
         intake2 = map.get(DigitalChannel.class, "intake2");
+        purplePixel = map.get(Servo.class, "purplePixel");
 
         intakeGate = map.get(Servo.class, "intakeGate");
+
+        purplePixel.setPosition(0);
 
         intakeGate.setPosition(0);
         intakeGate.setDirection(Servo.Direction.REVERSE);
@@ -119,6 +124,14 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeServo.setPower(-1);
     }
 
+    public void ExtendPurple(){
+        purplePixel.setPosition(0.85);
+    }
+
+    public void RetractPurple(){
+
+        purplePixel.setPosition(0);
+    }
     public boolean IntakeSensor1(){
         return !intake1.getState();
     }

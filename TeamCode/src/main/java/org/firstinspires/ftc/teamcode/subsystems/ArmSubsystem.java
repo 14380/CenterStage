@@ -108,7 +108,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void LockLinkage(){
         //lock the transfer into the intake
-        linkageServo.setPosition(0.5);
+        linkageServo.setPosition(0.15);
     }
 
     public void UnlockLinkage(){
@@ -214,10 +214,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ExtendoOut(){
 
-        linkageServo.setPosition(0.9);
+        linkageServo.setPosition(1);
     }
     public void LockExtendo(){
-        linkageServo.setPosition(0.1);
+        linkageServo.setPosition(0.05);
     }
 
     public void DropPixel(){
