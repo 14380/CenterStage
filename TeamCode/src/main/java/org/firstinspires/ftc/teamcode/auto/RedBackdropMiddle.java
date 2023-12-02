@@ -104,13 +104,13 @@ public class RedBackdropMiddle extends AutoOpBase {
 
         TrajectorySequence moveToPixelLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
                 .lineToSplineHeading(new Pose2d(20,-18, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(18,-18, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(18,-22, Math.toRadians(180)),
                         BotBuildersMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
 
         TrajectorySequence moveToPixelRight = drive.trajectorySequenceBuilder(moveToRight.end())
-                .lineToSplineHeading(new Pose2d(38,-16, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(40,-20, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveIntoCenterPosition = drive.trajectorySequenceBuilder(movePixelToCenter.end())
