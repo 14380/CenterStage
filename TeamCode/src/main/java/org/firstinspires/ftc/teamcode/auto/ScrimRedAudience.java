@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class RedBackParkSimple extends AutoOpBase {
+public class ScrimRedAudience extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;
@@ -61,7 +61,6 @@ public class RedBackParkSimple extends AutoOpBase {
 
                 //move back ready to make first move
                 .lineToSplineHeading(new Pose2d(42, -33, Math.toRadians(90)))
-
                 .build();
 
         TrajectorySequence moveForward2 = drive.trajectorySequenceBuilder(moveForward.end())
@@ -104,15 +103,15 @@ public class RedBackParkSimple extends AutoOpBase {
 
         //these are the three parking positions at the rear of the field
         //duplicated for each location, the starting paths are very similar.
-        TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveToRight.end())
+        TrajectorySequence moveToBackDropParkRight = drive.trajectorySequenceBuilder(moveToRight2.end())
                 .lineToSplineHeading(new Pose2d(130, -5, Math.toRadians(180)))
                 .build();
 
-        TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
+        TrajectorySequence moveToBackDropParkLeft = drive.trajectorySequenceBuilder(moveToLeft2.end())
                 .lineToSplineHeading(new Pose2d(130, -5, Math.toRadians(180)))
                 .build();
 
-        TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveForward.end())
+        TrajectorySequence moveToBackDropParkCenter = drive.trajectorySequenceBuilder(moveForward2.end())
                 .lineToSplineHeading(new Pose2d(130, -5, Math.toRadians(180)))
                 .build();
 
