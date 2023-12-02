@@ -25,12 +25,12 @@ public class ArmUpRightAuto extends SequentialCommandGroup {
                 new InstantCommand(()->{
                     state.middleArm = RobotStateSubsystem.MiddleArmState.UP;
                 }),
-                //new StagedVerticalCommand(vertSlide, state),
+
                 new Pos1ExtendCommand(vertSlide),
                 new ArmLeftCommand(arm),
                 new ArmExtendoOutCommand(arm),
                 new RotateTransferLeftCommand(arm)
-                //new StagedVerticalCommand(vertSlide, state)
+
         );
 
         addRequirements(arm, state);

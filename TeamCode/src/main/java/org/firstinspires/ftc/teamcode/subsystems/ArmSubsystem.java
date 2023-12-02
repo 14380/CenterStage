@@ -192,7 +192,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ArmRightPosition(){
 
-        rotateServo.setPosition(1);
+        rotateServo.setPosition(0.9);
     }
 
     public void TransferLeftRotate(){
