@@ -28,7 +28,7 @@ public class VerticalSlideSubsystem extends SubsystemBase {
 
     public VerticalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         verticalMotor = map.get(DcMotorEx.class, "verticalSlide");
-        verticalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+       // verticalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         verticalMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 

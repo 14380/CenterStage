@@ -164,6 +164,17 @@ public class BBTeleOp extends CommandOpMode {
                new IntakeOffCommand(intakeSubsystem)
        );
 
+        gp2.getGamepadButton(GamepadKeys.Button.B).whenPressed(
+                //intake on
+                new SequentialCommandGroup(
+                        new IntakeOnCommand(intakeSubsystem),
+                        new LockTransferCommand(armSubsystem)
+                )
+        ).whenReleased(
+                //intake off.
+                new IntakeOffCommand(intakeSubsystem)
+        );
+
         gp1.getGamepadButton(GamepadKeys.Button.A).whenPressed(
                 //intake reversed
 
@@ -191,6 +202,17 @@ public class BBTeleOp extends CommandOpMode {
                     () ->{
                         return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.DOWN;
                     }
+                )
+        );
+
+        gp2.getGamepadButton(GamepadKeys.Button.Y).whenPressed(
+
+                new ConditionalCommand(
+                        new UnlockTransferCommand(armSubsystem),
+                        new WaitCommand(1),
+                        () ->{
+                            return stateSubsystem.middleArm == RobotStateSubsystem.MiddleArmState.DOWN;
+                        }
                 )
         );
 
@@ -376,7 +398,7 @@ public class BBTeleOp extends CommandOpMode {
 
 
 
-        schedule(new InstantCommand(() -> telemetry.addData( "Hor", horizontalSlideSubsystem.getCurrentPosition() )));
+        /*schedule(new InstantCommand(() -> telemetry.addData( "Hor", horizontalSlideSubsystem.getCurrentPosition() )));
         schedule(new InstantCommand(() -> telemetry.addData( "Vert", verticalSlideSubsystem.getCurrentPosition() )));
         schedule(new InstantCommand(() -> telemetry.addData( "Arm State", stateSubsystem.middleArm )));
         schedule(new InstantCommand(() -> telemetry.addData( "Vert State", stateSubsystem.verticalHeight )));
@@ -385,7 +407,7 @@ public class BBTeleOp extends CommandOpMode {
         schedule(new InstantCommand(() -> telemetry.addData( "Top", intakeSubsystem.IntakeSensor1() )));
 
         schedule(new InstantCommand(() -> telemetry.addData( "Bottom", intakeSubsystem.IntakeSensor2())));
-
+        */
 
 
         schedule(new InstantCommand(()-> telemetry.update()));

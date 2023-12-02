@@ -3,18 +3,26 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
+import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
 import com.arcrobotics.ftclib.command.WaitUntilCommand;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.commands.arm.DropPixelCommand;
+import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
+import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
+import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
+import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.RobotStateSubsystem;
+import org.firstinspires.ftc.teamcode.subsystems.VerticalSlideSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.VisionSubsystem;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
@@ -30,6 +38,10 @@ public class ScrimRedAudience extends AutoOpBase {
     private RobotStateSubsystem state;
 
     private IntakeSubsystem intake;
+
+    private ArmSubsystem armSubsystem;
+
+    private VerticalSlideSubsystem verticalSlideSubsystem;
 
 
     private TrajectorySequenceFollowerCommand forwardFollower;
@@ -50,6 +62,8 @@ public class ScrimRedAudience extends AutoOpBase {
 
         intake = new IntakeSubsystem(hardwareMap, state);
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
+        armSubsystem = new ArmSubsystem(hardwareMap, state);
+        verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, state);
 
         //Set the starting position of the robot
         Pose2d startingPosition = new Pose2d(36, -62, Math.toRadians(90));
@@ -115,6 +129,23 @@ public class ScrimRedAudience extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(130, -5, Math.toRadians(180)))
                 .build();
 
+        TrajectorySequence moveToBackDropSideGameLeft = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
+                .lineToSplineHeading(new Pose2d(136, -9, Math.toRadians(180)))
+                .build();
+
+        TrajectorySequence moveToBackDropSideGameRight = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
+                .lineToSplineHeading(new Pose2d(136, -20, Math.toRadians(180)))
+                .build();
+
+        TrajectorySequence moveToBackDropSideGameCenter = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
+                .lineToSplineHeading(new Pose2d(136, -16, Math.toRadians(180)))
+                .build();
+
+        TrajectorySequence moveOffBackDropCenter = drive.trajectorySequenceBuilder(moveToBackDropSideGameCenter.end())
+                .lineToSplineHeading(new Pose2d(130, -5, Math.toRadians(180)))
+                .build();
+
+
 
         forwardFollower = new TrajectorySequenceFollowerCommand(drive, moveForward);
         leftFollower = new TrajectorySequenceFollowerCommand(drive, moveToLeft);
@@ -127,6 +158,14 @@ public class ScrimRedAudience extends AutoOpBase {
         TrajectorySequenceFollowerCommand forward2Follower = new TrajectorySequenceFollowerCommand(drive, moveForward2);
         TrajectorySequenceFollowerCommand left2Follower = new TrajectorySequenceFollowerCommand(drive, moveToLeft2);
         TrajectorySequenceFollowerCommand right2Follower = new TrajectorySequenceFollowerCommand(drive, moveToRight2);
+
+        TrajectorySequenceFollowerCommand moveOffBackdropCenter = new TrajectorySequenceFollowerCommand(drive, moveOffBackDropCenter);
+        TrajectorySequenceFollowerCommand moveOffBackdropCenterRight = new TrajectorySequenceFollowerCommand(drive, moveOffBackDropCenter);
+        TrajectorySequenceFollowerCommand moveOffBackdropLeft = new TrajectorySequenceFollowerCommand(drive, moveOffBackDropCenter);
+
+        TrajectorySequenceFollowerCommand moveToBackDropSideGameCenterFollower = new TrajectorySequenceFollowerCommand(drive,moveToBackDropSideGameCenter );
+        TrajectorySequenceFollowerCommand moveToBackDropSideGameRightFollower = new TrajectorySequenceFollowerCommand(drive, moveToBackDropSideGameRight);
+        TrajectorySequenceFollowerCommand moveToBackDropSideGameLeftFollower = new TrajectorySequenceFollowerCommand(drive, moveToBackDropSideGameLeft);
 
         //wait for the op mode to start, then execute our paths.
 
@@ -141,7 +180,21 @@ public class ScrimRedAudience extends AutoOpBase {
                                         new RetractPurpleCommand(intake),
                                         new WaitCommand(500),
                                         left2Follower,
-                                        backFollowerLeft
+                                        backFollowerLeft,
+                                        new ParallelCommandGroup(
+                                                new SequentialCommandGroup(
+                                                        new MiddleArmUpCommand(armSubsystem),
+                                                        new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                )
+                                        ),
+                                        new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                        new WaitCommand(500),
+                                        moveToBackDropSideGameLeftFollower,
+                                        new DropPixelCommand(armSubsystem),
+                                        new WaitCommand(800),
+                                        moveOffBackdropLeft,
+                                        new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
+
                                 ),
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
@@ -149,14 +202,42 @@ public class ScrimRedAudience extends AutoOpBase {
                                                 new RetractPurpleCommand(intake),
                                                 new WaitCommand(500),
                                                 right2Follower,
-                                                backFollowerRight
+                                                backFollowerRight,
+                                                new ParallelCommandGroup(
+                                                        new SequentialCommandGroup(
+                                                                new MiddleArmUpCommand(armSubsystem),
+                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                        )
+                                                ),
+                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new WaitCommand(500),
+                                                moveToBackDropSideGameRightFollower,
+                                                new DropPixelCommand(armSubsystem),
+                                                new WaitCommand(800),
+                                                moveOffBackdropCenterRight,
+                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
+
                                         ),
                                         new SequentialCommandGroup(
                                             forwardFollower,
                                                 new RetractPurpleCommand(intake),
                                                 new WaitCommand(500),
                                                 forward2Follower,
-                                                backFollowerCenter
+                                                backFollowerCenter,
+                                                new ParallelCommandGroup(
+                                                        new SequentialCommandGroup(
+                                                                new MiddleArmUpCommand(armSubsystem),
+                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                        )
+                                                ),
+                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new WaitCommand(500),
+                                                moveToBackDropSideGameCenterFollower,
+                                                new DropPixelCommand(armSubsystem),
+                                                new WaitCommand(800),
+                                                moveOffBackdropCenter,
+                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
+
                                         ),
                                         ()->{
                                             return visionSubsystem.getPosition() == CenterStageVisionProcessor.StartingPosition.RIGHT;

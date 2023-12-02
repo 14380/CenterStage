@@ -55,7 +55,7 @@ public class StagedVerticalCommand extends CommandBase {
             }
             else if(this.state.verticalHeight == RobotStateSubsystem.VerticalHeight.POS0){
 
-                boolean pos1Result = this.slideSubsystem.HasMoveFrom0to1Completed();
+                boolean pos1Result = this.slideSubsystem.IsPosition1();
                 if (pos1Result) {
                     this.state.verticalHeight = RobotStateSubsystem.VerticalHeight.POS1;
                 }
