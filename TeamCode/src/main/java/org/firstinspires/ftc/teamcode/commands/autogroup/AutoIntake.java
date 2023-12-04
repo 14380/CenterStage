@@ -25,13 +25,14 @@ public class AutoIntake extends SequentialCommandGroup {
                 new LockTransferCommand(arm),
                 new IntakeOnCommand(intake),
                 new WaitCommand(1500),
+                new IntakeOffCommand(intake),
+                new WaitCommand(500),
                 new IntakeAdvanceCommand(intake),
                 new WaitCommand(1000),
-                new IntakeOnCommand(intake),
-                new WaitCommand(1500),
                 new IntakeReverseCommand(intake),
-                new WaitCommand(2500),
-                new IntakeOffCommand(intake)
+                new WaitCommand(1500),
+                new IntakeOffCommand(intake),
+                new UnlockTransferCommand(arm)
         );
 
         addRequirements(intake, arm);

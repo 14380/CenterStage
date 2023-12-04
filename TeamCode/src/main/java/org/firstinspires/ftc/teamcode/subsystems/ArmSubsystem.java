@@ -208,6 +208,9 @@ public class ArmSubsystem extends SubsystemBase {
         transferServo.setPosition(RIGHT_TRANSFER_ROTATE);
     }
 
+    public void TransferRightRotateWhite(){
+        transferServo.setPosition(RIGHT_TRANSFER_ROTATE + 0.1);
+    }
     public void ExtendoIn(){
         linkageServo.setPosition(0);
     }

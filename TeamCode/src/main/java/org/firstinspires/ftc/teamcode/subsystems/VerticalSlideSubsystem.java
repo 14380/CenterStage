@@ -19,6 +19,10 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     //a little higher than pos1
     private int AUTO_HEIGHT = 1050;
 
+
+    //Extra height for second pixel in auto
+    private int POS_AUTO_EX_HEIGHT = 1000;
+
     //this is the height of position 2 of the vertical slides.
     //This CAN NOT GO HIGHER than 1750 - EXTENDED_POS
     private int POS_2_HEIGHT = 1600;
@@ -53,6 +57,16 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     public boolean IsPosition1(){
 
         return verticalMotor.getCurrentPosition() >= (POS_1_HEIGHT - 20);
+    }
+
+    public void PositionAutoEx(){
+        verticalMotor.setTargetPosition(POS_AUTO_EX_HEIGHT);
+        verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotor.setPower(1);
+    }
+
+    public boolean IsPositionAutoEx(){
+        return verticalMotor.getCurrentPosition() >= (POS_AUTO_EX_HEIGHT - 20);
     }
 
     public void AutoPosition(){
