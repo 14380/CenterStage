@@ -125,7 +125,7 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void ExtendPurple(){
-        purplePixel.setPosition(0.88);
+        purplePixel.setPosition(0.85);//0.88);
     }
 
     public void RetractPurple(){

@@ -11,20 +11,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.arm.DropPixelCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferRightWhiteCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropAutoCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
-import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.AutoIntake;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
-import org.firstinspires.ftc.teamcode.commands.vertical.PosAutoExExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -38,7 +29,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class RedAudienceSinglePickup extends AutoOpBase {
+public class RedAudienceYellowBackStage extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;
@@ -227,16 +218,10 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                         new Pos1ExtendCommand(verticalSlideSubsystem)
                                                 )
                                         ),
-                                        new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
-                                        new WaitCommand(500),
-                                        moveToBackDropSideGameLeftFollower,
-                                        new DropPixelCommand(armSubsystem),
-                                        new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                        //new RotateTransferRightWhiteCommand(armSubsystem),
-                                        new WaitCommand(500),
+                                        new MiddleArmUpCommand(armSubsystem),
+                                        new WaitCommand(1000),
                                         new DropPixelCommand(armSubsystem),
                                         new WaitCommand(500),
-                                        moveOffBackdropLeft,
                                         new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
 
                                 ),
@@ -254,15 +239,10 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                                 new Pos1ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
-                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
-                                                new WaitCommand(500),
-                                                moveToBackDropSideGameRightFollower,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
-                                                new WaitCommand(500),
+                                                new MiddleArmUpCommand(armSubsystem),
+                                                new WaitCommand(1000),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
-                                                moveOffBackdropCenterRight,
                                                 new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
 
                                         ),
@@ -279,16 +259,10 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                                 new Pos1ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
-                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
-                                                new WaitCommand(500),
-                                                moveToBackDropSideGameCenterFollower,
-                                                moveToSideForExtraWhite,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
-                                                new WaitCommand(500),
+                                                new MiddleArmUpCommand(armSubsystem),
+                                                new WaitCommand(1000),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
-                                                moveOffBackdropCenter,
                                                 new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
 
                                         ),

@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.commands.arm.UnlockTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
-import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpRightAuto;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
@@ -36,7 +35,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class RedBackdropMiddle extends AutoOpBase {
+public class RedBackdropMiddleDouble extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;

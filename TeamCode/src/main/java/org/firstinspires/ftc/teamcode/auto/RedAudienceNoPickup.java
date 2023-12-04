@@ -11,23 +11,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.commands.arm.DropPixelCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferRightWhiteCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropAutoCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
-import org.firstinspires.ftc.teamcode.commands.autogroup.AutoIntake;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
-import org.firstinspires.ftc.teamcode.commands.vertical.PosAutoExExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
-import org.firstinspires.ftc.teamcode.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.subsystems.ArmSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.DriveSubsystem;
 import org.firstinspires.ftc.teamcode.subsystems.IntakeSubsystem;
@@ -38,7 +28,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class RedAudienceSinglePickup extends AutoOpBase {
+public class RedAudienceNoPickup extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;
@@ -93,12 +83,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(-42, -55, Math.toRadians(90)))
                 //move to in front of the stack
                 .lineToSplineHeading(new Pose2d(-42,-1, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(-48, -1, Math.toRadians(180)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToSplineHeading(new Pose2d(-41, -1, Math.toRadians(180)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
 
@@ -114,12 +98,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(-30, -42, Math.toRadians(90)))
                 //move to in front of the stack
                 .lineToSplineHeading(new Pose2d(-42,-1, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(-48, -1, Math.toRadians(180)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToSplineHeading(new Pose2d(-41, -1, Math.toRadians(180)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
 
@@ -138,12 +116,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 //move to in front of the stack
                 .lineToSplineHeading(new Pose2d(-42,-1, Math.toRadians(180)))
 
-                .lineToSplineHeading(new Pose2d(-48, -1, Math.toRadians(180)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToSplineHeading(new Pose2d(-41, -1, Math.toRadians(180)),
-                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
-                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
 
@@ -219,7 +191,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                         new RetractPurpleCommand(intake),
                                         new WaitCommand(500),
                                         left2Follower,
-                                        new AutoIntake(intake, armSubsystem),
                                         backFollowerLeft,
                                         new ParallelCommandGroup(
                                                 new SequentialCommandGroup(
@@ -230,9 +201,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                         new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
                                         new WaitCommand(500),
                                         moveToBackDropSideGameLeftFollower,
-                                        new DropPixelCommand(armSubsystem),
-                                        new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                        //new RotateTransferRightWhiteCommand(armSubsystem),
                                         new WaitCommand(500),
                                         new DropPixelCommand(armSubsystem),
                                         new WaitCommand(500),
@@ -246,7 +214,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new RetractPurpleCommand(intake),
                                                 new WaitCommand(500),
                                                 right2Follower,
-                                                new AutoIntake(intake, armSubsystem),
                                                 backFollowerRight,
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
@@ -257,8 +224,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameRightFollower,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
                                                 new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
@@ -271,7 +236,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new RetractPurpleCommand(intake),
                                                 new WaitCommand(500),
                                                 forward2Follower,
-                                                new AutoIntake(intake, armSubsystem),
                                                 backFollowerCenter,
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
@@ -283,8 +247,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameCenterFollower,
                                                 moveToSideForExtraWhite,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
                                                 new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),

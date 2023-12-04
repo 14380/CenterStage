@@ -12,17 +12,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.commands.arm.DropPixelCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.RotateTransferRightWhiteCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropAutoCommand;
-import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.AutoIntake;
+import org.firstinspires.ftc.teamcode.commands.autogroup.FastAutoIntake;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.Pos0ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.PosAutoExExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
@@ -38,7 +35,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class RedAudienceSinglePickup extends AutoOpBase {
+public class RedAudienceDoublePickup extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;
@@ -90,13 +87,13 @@ public class RedAudienceSinglePickup extends AutoOpBase {
         TrajectorySequence moveForward2 = drive.trajectorySequenceBuilder(moveForward.end())
 
                 //move back ready to make first move
-                .lineToSplineHeading(new Pose2d(-42, -55, Math.toRadians(90)))
+                .lineToSplineHeading(new Pose2d(-42, -40, Math.toRadians(90)))
                 //move to in front of the stack
-                .lineToSplineHeading(new Pose2d(-42,-1, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(-48, -1, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(-42,-3, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-48, -3, Math.toRadians(180)),
                         BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToSplineHeading(new Pose2d(-41, -1, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(-41, -3, Math.toRadians(180)),
                         BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
@@ -106,7 +103,6 @@ public class RedAudienceSinglePickup extends AutoOpBase {
         //this is our standard left hand random move
         TrajectorySequence moveToLeft = drive.trajectorySequenceBuilder(startingPosition)
                 .lineToSplineHeading(new Pose2d(-38, -38, Math.toRadians(110)))
-
                 .build();
 
         TrajectorySequence moveToLeft2 = drive.trajectorySequenceBuilder(moveToLeft.end())
@@ -183,6 +179,14 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .build();
 
 
+        TrajectorySequence moveBackToStack = drive.trajectorySequenceBuilder(moveOffBackDropCenter.end())
+                .lineToSplineHeading(new Pose2d(-46, -1, Math.toRadians(180)))
+
+                .build();
+
+        TrajectorySequence moveToBackdropCycle2 = drive.trajectorySequenceBuilder(moveBackToStack.end())
+                .lineToSplineHeading(new Pose2d(62, -5, Math.toRadians(180)))
+                .build();
 
         forwardFollower = new TrajectorySequenceFollowerCommand(drive, moveForward);
         leftFollower = new TrajectorySequenceFollowerCommand(drive, moveToLeft);
@@ -206,6 +210,10 @@ public class RedAudienceSinglePickup extends AutoOpBase {
 
         TrajectorySequenceFollowerCommand moveToSideForExtraWhite = new TrajectorySequenceFollowerCommand(drive, moveToBackDropSideGameCenterOrange);
         //wait for the op mode to start, then execute our paths.
+
+        TrajectorySequenceFollowerCommand moveToStackSecondFollower = new TrajectorySequenceFollowerCommand(drive, moveBackToStack);
+
+        TrajectorySequenceFollowerCommand moveToBackDrop2Follower = new TrajectorySequenceFollowerCommand(drive, moveToBackdropCycle2);
 
         intake.ExtendPurple();
 
@@ -258,7 +266,7 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameRightFollower,
                                                 new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
+                                              //  new RotateTransferRightWhiteCommand(armSubsystem),
                                                 new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
@@ -269,29 +277,47 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                         new SequentialCommandGroup(
                                             forwardFollower,
                                                 new RetractPurpleCommand(intake),
-                                                new WaitCommand(500),
+                                                new WaitCommand(120),
                                                 forward2Follower,
-                                                new AutoIntake(intake, armSubsystem),
+                                                new FastAutoIntake(intake, armSubsystem),
                                                 backFollowerCenter,
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
                                                 new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
-                                                new WaitCommand(500),
+                                                new WaitCommand(200),
                                                 moveToBackDropSideGameCenterFollower,
                                                 moveToSideForExtraWhite,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
-                                                new WaitCommand(500),
+                                               // new PosAutoExExtendCommand(verticalSlideSubsystem),
+                                              //  new RotateTransferRightWhiteCommand(armSubsystem),
+                                               // new WaitCommand(200),
                                                 new DropPixelCommand(armSubsystem),
-                                                new WaitCommand(500),
+                                                new WaitCommand(200),
                                                 moveOffBackdropCenter,
+                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new ParallelCommandGroup(
+                                                        new IntakeOnCommand(intake),
+                                                        moveToStackSecondFollower
+                                                ),
+                                                new FastAutoIntake(intake, armSubsystem),
+                                                moveToBackDrop2Follower,
+                                                new ParallelCommandGroup(
+                                                        new SequentialCommandGroup(
+                                                                new MiddleArmUpCommand(armSubsystem),
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
+                                                        )
+                                                ),
+                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new WaitCommand(300),
+                                                new DropPixelCommand(armSubsystem),
+                                                new WaitCommand(300),
                                                 new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
 
-                                        ),
+
+                                                ),
                                         ()->{
                                             return visionSubsystem.getPosition() == CenterStageVisionProcessor.StartingPosition.RIGHT;
                                         }

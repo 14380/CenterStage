@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.auto;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.arcrobotics.ftclib.command.CommandScheduler;
 import com.arcrobotics.ftclib.command.ConditionalCommand;
-import com.arcrobotics.ftclib.command.InstantCommand;
 import com.arcrobotics.ftclib.command.ParallelCommandGroup;
 import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.WaitCommand;
@@ -21,7 +20,6 @@ import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerC
 import org.firstinspires.ftc.teamcode.commands.horizontal.ZeroOffHorizontalCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
-import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
@@ -38,7 +36,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.CenterStageVisionProcessor;
 
 @Autonomous(group = "drive")
-public class BlueBackdropMiddle extends AutoOpBase {
+public class BlueBackdropMiddleDouble extends AutoOpBase {
 
     private BotBuildersMecanumDrive robot;
     private DriveSubsystem drive;
