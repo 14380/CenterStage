@@ -30,6 +30,8 @@ public class VerticalSlideSubsystem extends SubsystemBase {
     //first position of the slide lift.
     private int POS_0_HEIGHT = 300;
 
+    private int POS_A_HEIGHT = 450;
+
     public VerticalSlideSubsystem(HardwareMap map, RobotStateSubsystem state){
         verticalMotor = map.get(DcMotorEx.class, "verticalSlide");
        // verticalMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -67,6 +69,16 @@ public class VerticalSlideSubsystem extends SubsystemBase {
 
     public boolean IsPositionAutoEx(){
         return verticalMotor.getCurrentPosition() >= (POS_AUTO_EX_HEIGHT - 20);
+    }
+
+    public void PositionAEx(){
+        verticalMotor.setTargetPosition(POS_A_HEIGHT);
+        verticalMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        verticalMotor.setPower(1);
+    }
+
+    public boolean IsPositionAEx(){
+        return verticalMotor.getCurrentPosition() >= (POS_A_HEIGHT - 20);
     }
 
     public void AutoPosition(){

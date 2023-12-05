@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropAutoCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.SinglePixelDropCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
+import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAutoPos0;
 import org.firstinspires.ftc.teamcode.commands.autogroup.AutoIntake;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeAdvanceCommand;
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.Pos0ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.PosAutoExExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
@@ -162,7 +164,7 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .build();
 
         TrajectorySequence moveToBackDropSideGameLeft = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(66, -9, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(66, -7, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropSideGameRight = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
@@ -170,7 +172,7 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .build();
 
         TrajectorySequence moveToBackDropSideGameCenter = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(66, -14, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(66, -12, Math.toRadians(180)))
                 .build();
 
         //Orange sidegame - now do the white sidegame.
@@ -227,7 +229,7 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                         new Pos1ExtendCommand(verticalSlideSubsystem)
                                                 )
                                         ),
-                                        new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                        new ArmUpLeftAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                         new WaitCommand(500),
                                         moveToBackDropSideGameLeftFollower,
                                         new DropPixelCommand(armSubsystem),
@@ -254,7 +256,7 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                                 new Pos1ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
-                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new ArmUpLeftAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameRightFollower,
                                                 new PosAutoExExtendCommand(verticalSlideSubsystem),
@@ -276,10 +278,10 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
-                                                new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new ArmUpLeftAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameCenterFollower,
                                                 moveToSideForExtraWhite,

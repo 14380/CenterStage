@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.Pos0ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
@@ -195,7 +196,7 @@ public class RedAudienceNoPickup extends AutoOpBase {
                                         new ParallelCommandGroup(
                                                 new SequentialCommandGroup(
                                                         new MiddleArmUpCommand(armSubsystem),
-                                                        new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                        new Pos0ExtendCommand(verticalSlideSubsystem)
                                                 )
                                         ),
                                         new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
@@ -218,7 +219,7 @@ public class RedAudienceNoPickup extends AutoOpBase {
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
                                                 new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),
@@ -240,7 +241,7 @@ public class RedAudienceNoPickup extends AutoOpBase {
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
                                                 new ArmUpLeftAuto(armSubsystem, verticalSlideSubsystem, state),

@@ -16,9 +16,11 @@ import org.firstinspires.ftc.teamcode.commands.arm.UnlockTransferCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpLeftAuto;
+import org.firstinspires.ftc.teamcode.commands.autogroup.AutoIntake;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOffCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.IntakeOnCommand;
+import org.firstinspires.ftc.teamcode.commands.intake.IntakeReverseCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
@@ -130,11 +132,11 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
         //move down to the stack for the center pos, drive slowly on top of it.
         TrajectorySequence moveCenterPath = drive.trajectorySequenceBuilder(moveIntoCenterPosition.end())
 
-                .lineToSplineHeading(new Pose2d(-45, -11.5, Math.toRadians(185)))
-                .lineToSplineHeading(new Pose2d(-56,-11.5, Math.toRadians(185)),
+                .lineToSplineHeading(new Pose2d(-45, -8, Math.toRadians(185)))
+                .lineToSplineHeading(new Pose2d(-56,-8, Math.toRadians(185)),
                         BotBuildersMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
-                .lineToSplineHeading(new Pose2d(-48.25, -11.5, Math.toRadians(185)),
+                .lineToSplineHeading(new Pose2d(-47, -8, Math.toRadians(185)),
                         BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .build();
@@ -225,7 +227,7 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                                         new ArmUpAuto(armSubsystem, verticalSubsystem, state)
                                                 )
                                         ),
-                                        new WaitCommand(500),
+
                                         new WaitCommand(300),
                                         new DropPixelCommand(armSubsystem),
                                         new WaitCommand(250),
@@ -242,9 +244,10 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                         new SequentialCommandGroup(
                                                 //this is where we
                                                 new IntakeOnCommand(intakeSubsystem),
-                                                new WaitCommand(1000),
+                                                new WaitCommand(1500),
                                                 moveOffStackLeftFollower,
-                                                new WaitCommand(500),
+                                                new IntakeReverseCommand(intakeSubsystem),
+                                                new WaitCommand(1500),
                                                 new ParallelCommandGroup(
                                                         moveBackToBackdropLeftFollower,
                                                         new SequentialCommandGroup(
@@ -282,7 +285,7 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                                             new ArmUpAuto(armSubsystem, verticalSubsystem, state)
                                                     )
                                             ),
-                                            new WaitCommand(500),
+
                                             new WaitCommand(300),
                                             new DropPixelCommand(armSubsystem),
                                             new WaitCommand(250),
@@ -299,13 +302,14 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                                 new SequentialCommandGroup(
                                                         //this is where we
                                                         new IntakeOnCommand(intakeSubsystem),
-                                                        new WaitCommand(1000),
+                                                        new WaitCommand(1500),
                                                         moveOffStackRightFollower,
-                                                        new WaitCommand(500),
+                                                        new IntakeReverseCommand(intakeSubsystem),
+                                                        new WaitCommand(1500),
                                                         new ParallelCommandGroup(
                                                                 moveBackToBackdropRightFollower,
                                                                 new SequentialCommandGroup(
-                                                                        new WaitCommand(1800),
+                                                                        new WaitCommand(500),
                                                                         new IntakeOffCommand(intakeSubsystem)
                                                                 )
                                                         ),
@@ -338,7 +342,7 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                                                 new ArmUpAuto(armSubsystem, verticalSubsystem, state)
                                                         )
                                                 ),
-                                                new WaitCommand(500),
+
                                                 new WaitCommand(300),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(250),
@@ -348,7 +352,7 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                                 new RetractPurpleCommand(intakeSubsystem),
                                                 moveToCenterFollower,
                                                 moveToPathCenterFollower,
-                                                new LockTransferCommand(armSubsystem),
+                                               // new AutoIntake(intakeSubsystem, armSubsystem),
                                                 //we have now driven onto and off the stack
                                                 // turn the intake on, give it a second
                                                 //then keep the intake on and move forward slowly
@@ -357,11 +361,12 @@ public class RedBackdropMiddleDouble extends AutoOpBase {
                                                         new IntakeOnCommand(intakeSubsystem),
                                                         new WaitCommand(1000),
                                                         moveOffStackFollower,
-                                                        new WaitCommand(500),
+                                                        new IntakeReverseCommand(intakeSubsystem),
+                                                        new WaitCommand(1500),
                                                         new ParallelCommandGroup(
                                                                 moveBackToBackdropFollower,
                                                                 new SequentialCommandGroup(
-                                                                        new WaitCommand(1800),
+                                                                        new WaitCommand(500),
                                                                         new IntakeOffCommand(intakeSubsystem)
                                                                 )
                                                         ),

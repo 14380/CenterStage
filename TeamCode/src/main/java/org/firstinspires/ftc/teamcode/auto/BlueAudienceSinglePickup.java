@@ -13,10 +13,13 @@ import org.firstinspires.ftc.teamcode.commands.arm.DropPixelCommand;
 import org.firstinspires.ftc.teamcode.commands.arm.MiddleArmUpCommand;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmDownAuto;
 import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpRightAuto;
+import org.firstinspires.ftc.teamcode.commands.autogroup.ArmUpRightAutoPos0;
 import org.firstinspires.ftc.teamcode.commands.autogroup.AutoIntake;
 import org.firstinspires.ftc.teamcode.commands.drive.TrajectorySequenceFollowerCommand;
 import org.firstinspires.ftc.teamcode.commands.intake.RetractPurpleCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.Pos0ExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vertical.Pos1ExtendCommand;
+import org.firstinspires.ftc.teamcode.commands.vertical.PosAutoExExtendCommand;
 import org.firstinspires.ftc.teamcode.commands.vision.StopStreamingCommand;
 import org.firstinspires.ftc.teamcode.drive.BotBuildersMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.DriveConstants;
@@ -85,7 +88,7 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
                 //move to in front of the stack
                 .lineToSplineHeading(new Pose2d(-42,2, Math.toRadians(180)))
 
-                .lineToSplineHeading(new Pose2d(-48, 2, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(-48.5, 2, Math.toRadians(180)),
                         BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
                 .lineToSplineHeading(new Pose2d(-42, 2, Math.toRadians(180)),
@@ -106,6 +109,13 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(-40, 55, Math.toRadians(270)))
                 //move to in front of the stack
                 .lineToSplineHeading(new Pose2d(-45,0, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-48.5, 2, Math.toRadians(180)),
+                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToSplineHeading(new Pose2d(-42, 2, Math.toRadians(180)),
+                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
                 .build();
 
 
@@ -119,6 +129,13 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(-31, 25, Math.toRadians(270)))
                 //move to in front of the stack
                 .lineToSplineHeading(new Pose2d(-45,5, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-49, 2, Math.toRadians(180)),
+                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                .lineToSplineHeading(new Pose2d(-42, 2, Math.toRadians(180)),
+                        BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                        BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+
                 .build();
 
         //these are the three transient positions at the rear of the field
@@ -137,7 +154,7 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
 
         //location on the backdrop for the center pixel to be dropped
         TrajectorySequence moveToBackDropCenter = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(64, 10, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(65, 9.5, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveOffBackDropCenter = drive.trajectorySequenceBuilder(moveToBackDropCenter.end())
@@ -148,6 +165,11 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
         TrajectorySequence moveToParkCenter = drive.trajectorySequenceBuilder(moveToBackDropCenter.end())
                 .lineToSplineHeading(new Pose2d(60, 0, Math.toRadians(180)))
                 .build();
+        //parking with the turn
+        TrajectorySequence parkTurnCenter = drive.trajectorySequenceBuilder(moveToParkCenter.end())
+                .lineToSplineHeading(new Pose2d(55, 12, Math.toRadians(270)))
+                .build();
+
         //parking location for left
         TrajectorySequence moveToLeftPark = drive.trajectorySequenceBuilder(moveToBackDropParkLeft.end())
                 .lineToSplineHeading(new Pose2d(60, 0, Math.toRadians(180)))
@@ -161,7 +183,7 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
 
         //location on the backdrop for the right pixel to be dropped.
         TrajectorySequence moveToBackDropRight = drive.trajectorySequenceBuilder(moveToBackDropParkRight.end())
-                .lineToSplineHeading(new Pose2d(64, 7, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(65, 7, Math.toRadians(180)))
                 .build();
 
 
@@ -207,6 +229,11 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
         TrajectorySequenceFollowerCommand leftParkFollower = new TrajectorySequenceFollowerCommand(drive, moveToLeftPark);
         TrajectorySequenceFollowerCommand rightParkFollower = new TrajectorySequenceFollowerCommand(drive, moveToRightPark);
 
+        TrajectorySequenceFollowerCommand centerParkTurnFollower = new TrajectorySequenceFollowerCommand(drive, parkTurnCenter);
+        TrajectorySequenceFollowerCommand rightParkTurnFollower = new TrajectorySequenceFollowerCommand(drive, parkTurnCenter);
+        TrajectorySequenceFollowerCommand leftParkTurnFollower = new TrajectorySequenceFollowerCommand(drive, parkTurnCenter);
+
+
         intake.ExtendPurple();
 
         CommandScheduler.getInstance().schedule(
@@ -218,22 +245,26 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
                                         new RetractPurpleCommand(intake),
                                         new WaitCommand(500),
                                         moveLeft2,
+                                        new AutoIntake(intake, armSubsystem),
                                         backFollowerLeft,
                                         new ParallelCommandGroup(
                                                 new SequentialCommandGroup(
                                                         new MiddleArmUpCommand(armSubsystem),
-                                                        new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                        new Pos0ExtendCommand(verticalSlideSubsystem)
                                                 )
                                         ),
-                                        new ArmUpRightAuto(armSubsystem, verticalSlideSubsystem, state),
+                                        new ArmUpRightAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                         new WaitCommand(500),
                                         moveToBackDropSideGameLeftFollower,
                                         new WaitCommand(500),
                                         new DropPixelCommand(armSubsystem),
                                         new WaitCommand(500),
+                                        new PosAutoExExtendCommand(verticalSlideSubsystem),
+                                        new WaitCommand(500),
                                         moveOffBackdropLeftFollower,
                                         new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
-                                        leftParkFollower
+                                        leftParkFollower,
+                                        leftParkTurnFollower
                                 ),
                                 new ConditionalCommand(
                                         new SequentialCommandGroup(
@@ -241,22 +272,26 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
                                                 new RetractPurpleCommand(intake),
                                                 new WaitCommand(500),
                                                 moveRight2,
+                                                new AutoIntake(intake, armSubsystem),
                                                 backFollowerRight,
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
-                                                new ArmUpRightAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new ArmUpRightAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameRightFollower,
                                                 new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
+                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
+                                                new WaitCommand(500),
                                                 moveOffBackdropRightFollower,
                                                 new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
-                                                rightParkFollower
+                                                rightParkFollower,
+                                                rightParkTurnFollower
                                         ),
                                         new SequentialCommandGroup(
                                             forwardFollower,
@@ -268,18 +303,21 @@ public class BlueAudienceSinglePickup extends AutoOpBase {
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
-                                                new ArmUpRightAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                new ArmUpRightAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameCenterFollower,
                                                 new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
+                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
+                                                new WaitCommand(500),
                                                 moveOffBackdropCenterFollower,
                                                 new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
-                                                centerParkFollower
+                                                centerParkFollower,
+                                                centerParkTurnFollower
 
                                         ),
                                         ()->{

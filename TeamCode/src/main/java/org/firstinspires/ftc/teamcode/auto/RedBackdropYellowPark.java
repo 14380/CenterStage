@@ -85,7 +85,7 @@ public class RedBackdropYellowPark extends AutoOpBase {
 
         //this is our standard left hand random move
         TrajectorySequence moveToLeft = drive.trajectorySequenceBuilder(startingPosition)
-                .lineToSplineHeading(new Pose2d(61, -18, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(61, -15.5, Math.toRadians(180)))
                 .build();
 
 
@@ -95,8 +95,8 @@ public class RedBackdropYellowPark extends AutoOpBase {
                 .build();
 
         TrajectorySequence moveToPixelLeft = drive.trajectorySequenceBuilder(moveToLeft.end())
-                .lineToSplineHeading(new Pose2d(20,-18, Math.toRadians(180)))
-                .lineToSplineHeading(new Pose2d(18,-22, Math.toRadians(180)),
+                .lineToSplineHeading(new Pose2d(20,-31, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(17.5,-22, Math.toRadians(180)),
                         BotBuildersMecanumDrive.getVelocityConstraint(15, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH), BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
 
                 .build();
