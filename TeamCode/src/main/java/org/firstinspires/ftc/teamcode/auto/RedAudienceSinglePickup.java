@@ -163,16 +163,20 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .lineToSplineHeading(new Pose2d(58, -5, Math.toRadians(180)))
                 .build();
 
+        TrajectorySequence rotatePark = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
+                .lineToSplineHeading(new Pose2d(55, -18, Math.toRadians(90)))
+                .build();
+
         TrajectorySequence moveToBackDropSideGameLeft = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(66, -7, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -4, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropSideGameRight = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(66, -22, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -22, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropSideGameCenter = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(66, -12, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -12, Math.toRadians(180)))
                 .build();
 
         //Orange sidegame - now do the white sidegame.
@@ -207,6 +211,11 @@ public class RedAudienceSinglePickup extends AutoOpBase {
         TrajectorySequenceFollowerCommand moveToBackDropSideGameLeftFollower = new TrajectorySequenceFollowerCommand(drive, moveToBackDropSideGameLeft);
 
         TrajectorySequenceFollowerCommand moveToSideForExtraWhite = new TrajectorySequenceFollowerCommand(drive, moveToBackDropSideGameCenterOrange);
+
+        TrajectorySequenceFollowerCommand parkLeft = new TrajectorySequenceFollowerCommand(drive, rotatePark);
+        TrajectorySequenceFollowerCommand parkRight = new TrajectorySequenceFollowerCommand(drive, rotatePark);
+        TrajectorySequenceFollowerCommand parkCenter = new TrajectorySequenceFollowerCommand(drive, rotatePark);
+
         //wait for the op mode to start, then execute our paths.
 
         intake.ExtendPurple();
@@ -226,20 +235,19 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                         new ParallelCommandGroup(
                                                 new SequentialCommandGroup(
                                                         new MiddleArmUpCommand(armSubsystem),
-                                                        new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                        new Pos0ExtendCommand(verticalSlideSubsystem)
                                                 )
                                         ),
                                         new ArmUpLeftAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                         new WaitCommand(500),
                                         moveToBackDropSideGameLeftFollower,
                                         new DropPixelCommand(armSubsystem),
-                                        new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                        //new RotateTransferRightWhiteCommand(armSubsystem),
                                         new WaitCommand(500),
-                                        new DropPixelCommand(armSubsystem),
+                                        new PosAutoExExtendCommand(verticalSlideSubsystem),
                                         new WaitCommand(500),
                                         moveOffBackdropLeft,
-                                        new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
+                                        new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
+                                        parkLeft
 
                                 ),
                                 new ConditionalCommand(
@@ -253,19 +261,19 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new ParallelCommandGroup(
                                                         new SequentialCommandGroup(
                                                                 new MiddleArmUpCommand(armSubsystem),
-                                                                new Pos1ExtendCommand(verticalSlideSubsystem)
+                                                                new Pos0ExtendCommand(verticalSlideSubsystem)
                                                         )
                                                 ),
                                                 new ArmUpLeftAutoPos0(armSubsystem, verticalSlideSubsystem, state),
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameRightFollower,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
-                                                new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
+                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
+                                                new WaitCommand(500),
                                                 moveOffBackdropCenterRight,
-                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
+                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                parkRight
 
                                         ),
                                         new SequentialCommandGroup(
@@ -285,13 +293,13 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                                                 new WaitCommand(500),
                                                 moveToBackDropSideGameCenterFollower,
                                                 moveToSideForExtraWhite,
-                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
-                                               // new RotateTransferRightWhiteCommand(armSubsystem),
-                                                new WaitCommand(500),
                                                 new DropPixelCommand(armSubsystem),
                                                 new WaitCommand(500),
+                                                new PosAutoExExtendCommand(verticalSlideSubsystem),
+                                                new WaitCommand(500),
                                                 moveOffBackdropCenter,
-                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state)
+                                                new ArmDownAuto(armSubsystem, verticalSlideSubsystem, state),
+                                                parkCenter
 
                                         ),
                                         ()->{
