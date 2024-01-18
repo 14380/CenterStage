@@ -217,7 +217,9 @@ public class BlueAudienceNoPickup extends AutoOpBase {
         intake.ExtendPurple();
 
         CommandScheduler.getInstance().schedule(
+               // new WaitCommand(8000),
                 new WaitUntilCommand(this::isStarted).andThen(
+                        new WaitCommand(8000),
                         new StopStreamingCommand(visionSubsystem),
                         new ConditionalCommand(
                                 new SequentialCommandGroup(

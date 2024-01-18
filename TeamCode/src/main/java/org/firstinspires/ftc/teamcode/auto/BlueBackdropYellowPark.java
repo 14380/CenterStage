@@ -69,7 +69,7 @@ public class BlueBackdropYellowPark extends AutoOpBase {
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, state);
         verticalSubsystem = new VerticalSlideSubsystem(hardwareMap, state);
-        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, state);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, state, intakeSubsystem);
 
         //Set the starting position of the robot
         Pose2d startingPosition = new Pose2d(15, 62, Math.toRadians(270));

@@ -117,7 +117,7 @@ public class BBTeleOp extends CommandOpMode {
 
         //load all of our subsystems
         intakeSubsystem = new IntakeSubsystem(hardwareMap, stateSubsystem);
-        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, stateSubsystem, intakeSubsystem);
         winchSubsystem = new WinchSubsystem(hardwareMap, stateSubsystem);
         verticalSlideSubsystem = new VerticalSlideSubsystem(hardwareMap, stateSubsystem);
         armSubsystem = new ArmSubsystem(hardwareMap, stateSubsystem);
@@ -243,6 +243,7 @@ public class BBTeleOp extends CommandOpMode {
         gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                         new UnlockTransferCommand(armSubsystem),
+
                         new IncExtendHorizontalCommand(horizontalSlideSubsystem),
                         new InstantCommand( () -> {
                             stateSubsystem.horizontalHeight = RobotStateSubsystem.HorizontalHeight.EXTENDED;

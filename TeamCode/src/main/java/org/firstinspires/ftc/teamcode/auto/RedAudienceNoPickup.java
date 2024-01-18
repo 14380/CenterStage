@@ -141,15 +141,15 @@ public class RedAudienceNoPickup extends AutoOpBase {
                 .build();
 
         TrajectorySequence moveToBackDropSideGameLeft = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(67, -4, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -7, Math.toRadians(180))) // + 4
                 .build();
 
         TrajectorySequence moveToBackDropSideGameRight = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(67, -22, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -24, Math.toRadians(180))) // +2
                 .build();
 
         TrajectorySequence moveToBackDropSideGameCenter = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(67, -12, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -14, Math.toRadians(180))) //+2
                 .build();
 
         //Orange sidegame - now do the white sidegame.
@@ -194,7 +194,9 @@ public class RedAudienceNoPickup extends AutoOpBase {
         intake.ExtendPurple();
 
         CommandScheduler.getInstance().schedule(
+
                 new WaitUntilCommand(this::isStarted).andThen(
+                        new WaitCommand(8000),
                         new StopStreamingCommand(visionSubsystem),
                         //new WaitCommand(5000),
                         new ConditionalCommand(

@@ -115,7 +115,7 @@ public class RedAudienceSinglePickup extends AutoOpBase {
 
                 .lineToSplineHeading(new Pose2d(-30, -42, Math.toRadians(90)))
                 //move to in front of the stack
-                .lineToSplineHeading(new Pose2d(-42,-1, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(-30,-1, Math.toRadians(180)))
                 .lineToSplineHeading(new Pose2d(-48, -1, Math.toRadians(180)),
                         BotBuildersMecanumDrive.getVelocityConstraint(10, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
                         BotBuildersMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
@@ -168,15 +168,15 @@ public class RedAudienceSinglePickup extends AutoOpBase {
                 .build();
 
         TrajectorySequence moveToBackDropSideGameLeft = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(67, -4, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -7, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropSideGameRight = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(67, -22, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -23, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence moveToBackDropSideGameCenter = drive.trajectorySequenceBuilder(moveToBackDropParkCenter.end())
-                .lineToSplineHeading(new Pose2d(67, -12, Math.toRadians(180)))
+                .lineToSplineHeading(new Pose2d(67, -13, Math.toRadians(180)))
                 .build();
 
         //Orange sidegame - now do the white sidegame.

@@ -65,7 +65,7 @@ public class RedBackdropYellowPark extends AutoOpBase {
         visionSubsystem = new VisionSubsystem(hardwareMap, telemetry);
         armSubsystem = new ArmSubsystem(hardwareMap, state);
         verticalSubsystem = new VerticalSlideSubsystem(hardwareMap, state);
-        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, state);
+        horizontalSlideSubsystem = new HorizontalSlideSubsystem(hardwareMap, state, intakeSubsystem);
 
         //Set the starting position of the robot
         Pose2d startingPosition = new Pose2d(15, -62, Math.toRadians(90));
@@ -140,6 +140,7 @@ public class RedBackdropYellowPark extends AutoOpBase {
 
         CommandScheduler.getInstance().schedule(
                 new WaitUntilCommand(this::isStarted).andThen(
+                        new WaitCommand(15000),
                         new StopStreamingCommand(visionSubsystem),
                         new ConditionalCommand(
                                 new SequentialCommandGroup(

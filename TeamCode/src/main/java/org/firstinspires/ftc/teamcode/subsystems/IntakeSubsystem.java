@@ -64,9 +64,9 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public boolean IsTopCovered(){
 
-      if(IntakeSensor1() && IntakeSensor2()) {
+     /* if(IntakeSensor1() && IntakeSensor2()) {
         return true;
-      }
+      }*/
         return false;
     }
 
@@ -93,14 +93,14 @@ public class IntakeSubsystem extends SubsystemBase {
     public void IntakeOn(){
         intakeMotor.setPower(1);
         if(robotState.horizontalHeight == RobotStateSubsystem.HorizontalHeight.EXTENDED){
-            intakeGate.setPosition(0.5);
+           IntakeGateClose();
             if(IsTopCovered()){
                 IntakeAdvanceSpeed(0);
             }else{
                 IntakeAdvanceSpeed(1);
             }
         }else{
-            intakeGate.setPosition(0);
+            IntakeGateOpen();
             IntakeAdvanceSpeed(1);
         }
 
@@ -125,12 +125,20 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     public void ExtendPurple(){
-        purplePixel.setPosition(0.86);
+        purplePixel.setPosition(0.88);
     }
 
     public void RetractPurple(){
 
         purplePixel.setPosition(0);
+    }
+
+    public void IntakeGateClose(){
+        intakeGate.setPosition(0.5);
+    }
+
+    public void IntakeGateOpen(){
+        intakeGate.setPosition(0);
     }
     public boolean IntakeSensor1(){
         return !intake1.getState();
