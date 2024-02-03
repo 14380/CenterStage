@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -13,6 +14,7 @@ public class TestOp extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor drive = null;
+    private Servo servo = null;
 
     @Override
     public void runOpMode() {
@@ -20,6 +22,7 @@ public class TestOp extends LinearOpMode {
         telemetry.update();
 
         drive  = hardwareMap.get(DcMotor.class, "rightFront");
+        servo = hardwareMap.get(Servo.class, "testServo");
 
 
         // Wait for the game to start (driver presses PLAY)
@@ -31,8 +34,10 @@ public class TestOp extends LinearOpMode {
 
             if(gamepad1.a){
                 drive.setPower(1);
+                servo.setPosition(0);
             }else if(gamepad1.b){
                 drive.setPower(-1);
+                servo.setPosition(1);
             }else{
                 drive.setPower(0);
             }

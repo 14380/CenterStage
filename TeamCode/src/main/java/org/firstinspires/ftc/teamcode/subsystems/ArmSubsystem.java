@@ -217,7 +217,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     public void ExtendoOut(){
 
-        linkageServo.setPosition(1);
+        linkageServo.setPosition(0.7`);
     }
     public void LockExtendo(){
         linkageServo.setPosition(0.05);

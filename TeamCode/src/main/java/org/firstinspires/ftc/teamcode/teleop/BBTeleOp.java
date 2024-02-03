@@ -240,7 +240,7 @@ public class BBTeleOp extends CommandOpMode {
 
         //move the horizontal slides out when the button is pressed.
         //update the state on the last command to extended
-        gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
+        gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
                 new SequentialCommandGroup(
                         new UnlockTransferCommand(armSubsystem),
 
@@ -260,7 +260,7 @@ public class BBTeleOp extends CommandOpMode {
 
         //retract the horizontal slides all the way back into the robot.
         //update the state on the last command.
-        gp1.getGamepadButton(GamepadKeys.Button.LEFT_BUMPER).whenPressed(
+        gp1.getGamepadButton(GamepadKeys.Button.RIGHT_BUMPER).whenPressed(
                         new SequentialCommandGroup(
                                 new UnlockTransferCommand(armSubsystem),
                                 new RetractHorizontalCommand(horizontalSlideSubsystem),
